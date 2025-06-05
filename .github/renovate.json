@@ -3,5 +3,12 @@
   "extends": [
     "config:recommended",
     ":semanticPrefixFix"
-  ]
+  ],
+  "argocd": {
+    "fileMatch": [
+      "application-.*\\.ya?ml$",
+      "appproject-.*\\.ya?ml$",
+      "applicationset-.*\\.ya?ml$"
+    ]
+  }
 }
