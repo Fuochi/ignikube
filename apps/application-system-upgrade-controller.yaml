@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: system-upgrade-controller
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: system-upgrade
+    server: https://kubernetes.default.svc
+  project: default
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+      - ApplyOutOfSyncOnly=true
+      - FailOnSharedResource=true
+  source:
+    repoURL: https://github.com/rancher/system-upgrade-controller
+    targetRevision: v0.9.1
+    path: manifests
+### STILL MISSING Server and Agent Plans
