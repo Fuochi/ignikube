@@ -17,5 +17,5 @@ spec:
   source:
     repoURL: https://github.com/rancher/system-upgrade-controller
     targetRevision: v0.15.2
-    path: manifests
+    path: .
 ### STILL MISSING Server and Agent Plans
