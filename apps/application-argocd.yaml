@@ -21,118 +21,117 @@ spec:
     helm:
       releaseName: argocd
       valuesObject:
-        argocd:
-          global:
-            domain: deploy.fuochi.top
-            logging:
-              format: text
-              level: info
-            securityContext: {}
+        global:
+          domain: deploy.fuochi.top
+          logging:
+            format: text
+            level: info
+          securityContext: {}
 
-            networkPolicy:
-              create: true
-              defaultDenyIngress: false
+          networkPolicy:
+            create: true
+            defaultDenyIngress: false
 
-          configs:
-            cm:
-              create: true
-            params:
-              create: true
-            rbac:
-              create: true
-              policy.csv: |
-                g, admin, role:admin
-            secret:
-              createSecret: true
+        configs:
+          cm:
+            create: true
+          params:
+            create: true
+          rbac:
+            create: true
+            policy.csv: |
+              g, admin, role:admin
+          secret:
+            createSecret: true
 
-          ## Application controller
-          controller:
-            resources:
-              limits:
-                memory: 256Mi
-              requests:
-                cpu: 250m
-                memory: 256Mi
+        ## Application controller
+        controller:
+          resources:
+            limits:
+              memory: 256Mi
+            requests:
+              cpu: 250m
+              memory: 256Mi
 
-          ## Redis
-          redis:
-            readinessProbe:
-              enabled: true
-            livenessProbe:
-              enabled: true
+        ## Redis
+        redis:
+          readinessProbe:
+            enabled: true
+          livenessProbe:
+            enabled: true
 
-            resources:
-              limits:
-                memory: 64Mi
-              requests:
-                cpu: 100m
-                memory: 64Mi
+          resources:
+            limits:
+              memory: 64Mi
+            requests:
+              cpu: 100m
+              memory: 64Mi
 
-            serviceAccount:
-              create: true
+          serviceAccount:
+            create: true
 
-          ## Server
-          server:
-            resources:
-              limits:
-                memory: 64Mi
-              requests:
-                cpu: 50m
-                memory: 64Mi
+        ## Server
+        server:
+          resources:
+            limits:
+              memory: 64Mi
+            requests:
+              cpu: 50m
+              memory: 64Mi
 
-            ingress:
-              enabled: true
-              annotations:
-                cert-manager.io/cluster-issuer: letsencrypt-issuer
-                cert-manager.io/common-name: deploy.fuochi.top
-              tls: true
+          ingress:
+            enabled: true
+            annotations:
+              cert-manager.io/cluster-issuer: letsencrypt-issuer
+              cert-manager.io/common-name: deploy.fuochi.top
+            tls: true
 
-          ## Repo Server
-          repoServer:
-            resources:
-              limits:
-                memory: 64Mi
-              requests:
-                cpu: 10m
-                memory: 64Mi
+        ## Repo Server
+        repoServer:
+          resources:
+            limits:
+              memory: 128Mi
+            requests:
+              cpu: 10m
+              memory: 128Mi
 
-            serviceAccount:
-              create: true
+          serviceAccount:
+            create: true
 
-            rbac:
-              - apiGroups:
-                  - argoproj.io
-                resources:
-                  - applications
-                verbs:
-                  - get
-                  - list
-                  - watch
+          rbac:
+            - apiGroups:
+                - argoproj.io
+              resources:
+                - applications
+              verbs:
+                - get
+                - list
+                - watch
 
-          ## ApplicationSet controller
-          applicationSet:
-            resources:
-              limits:
-                memory: 128Mi
-              requests:
-                cpu: 100m
-                memory: 128Mi
+        ## ApplicationSet controller
+        applicationSet:
+          resources:
+            limits:
+              memory: 128Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
 
-            readinessProbe:
-              enabled: true
+          readinessProbe:
+            enabled: true
 
-            livenessProbe:
-              enabled: true
+          livenessProbe:
+            enabled: true
 
-            allowAnyNamespace: true
+          allowAnyNamespace: true
 
-          ## Disable unused components
-          notifications:
-            enabled: false
-            serviceAccount:
-              create: false
+        ## Disable unused components
+        notifications:
+          enabled: false
+          serviceAccount:
+            create: false
 
-          dex:
-            enabled: false
-            serviceAccount:
-              create: false
+        dex:
+          enabled: false
+          serviceAccount:
+            create: false
