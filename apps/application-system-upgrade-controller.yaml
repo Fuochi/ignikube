@@ -16,6 +16,6 @@ spec:
       - FailOnSharedResource=true
   source:
     repoURL: https://github.com/rancher/system-upgrade-controller
-    targetRevision: v0.9.1
+    targetRevision: v0.15.2
     path: manifests
 ### STILL MISSING Server and Agent Plans
