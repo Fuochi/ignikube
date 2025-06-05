@@ -37,6 +37,8 @@ spec:
             create: true
           params:
             create: true
+            # TLS termination on ingress
+            server.insecure: true
           rbac:
             create: true
             policy.csv: |
@@ -81,9 +83,9 @@ spec:
 
           ingress:
             enabled: true
+            ingressClassName: nginx
             annotations:
               cert-manager.io/cluster-issuer: letsencrypt-issuer
-              cert-manager.io/common-name: deploy.fuochi.top
             tls: true
 
         ## Repo Server
