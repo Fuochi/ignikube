@@ -1,3 +1,4 @@
+---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -15,14 +16,14 @@ spec:
       - ApplyOutOfSyncOnly=true
       - FailOnSharedResource=true
   sources:
-    - repoURL: https://github.com/Fuochi/ignikube.git
-      targetRevision: main
-      path: apps/cert-manager
-    - repoURL: https://charts.jetstack.io
-      chart: cert-manager
-      targetRevision: v1.17.2
+    - chart: cert-manager
+      repoURL: https://charts.jetstack.io
+      targetRevision: 1.17.2
       helm:
         releaseName: cert-manager
         valuesObject:
           crds:
             enabled: true
+    - repoURL: https://github.com/Fuochi/ignikube.git
+      targetRevision: main
+      path: apps/cert-manager
