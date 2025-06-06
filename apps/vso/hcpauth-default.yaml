@@ -6,5 +6,7 @@ metadata:
 spec:
   organizationID: 20d220e1-d3d2-409f-bb26-d515136dd805
   projectID: 70a2c878-6e91-4f07-a1ff-f0cc738e5978
+  allowedNamespaces:
+    - '*'
   servicePrincipal:
     secretRef: vso-sp
