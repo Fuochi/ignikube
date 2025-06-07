@@ -1,0 +1,25 @@
+---
+# Needed only to replicate vault service principal credentials across namespaces
+# Because of https://github.com/hashicorp/vault-secrets-operator/issues/423
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: reflector
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: reflector
+    server: https://kubernetes.default.svc
+  project: default
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+      - ApplyOutOfSyncOnly=true
+      - FailOnSharedResource=true
+  source:
+    repoURL: https://emberstack.github.io/helm-charts
+    chart: reflector
+    targetRevision: v9.1.9
+    helm:
+      releaseName: reflector
