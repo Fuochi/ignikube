@@ -1,0 +1,36 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: csi-driver-nfs
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: kube-system
+    server: https://kubernetes.default.svc
+  project: default
+  syncPolicy:
+    syncOptions:
+      - ApplyOutOfSyncOnly=true
+      - FailOnSharedResource=true
+  source:
+    repoURL: https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/charts
+    chart: csi-driver-nfs
+    targetRevision: 4.11.0
+    helm:
+      releaseName: csi-driver-nfs
+      valuesObject:
+        storageClass:
+          create: true
+          name: nfs-csi
+          annotations:
+            storageclass.kubernetes.io/is-default-class: 'true'
+          parameters:
+            server: nas.fuochi.top
+            share: /export/share01
+            mountPermissions: '0'
+          reclaimPolicy: Retain
+          volumeBindingMode: Immediate
+          mountOptions:
+            - nfsvers=4.1
