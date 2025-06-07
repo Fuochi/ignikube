@@ -29,6 +29,7 @@ spec:
           parameters:
             server: nas.fuochi.top
             share: /share01
+            subDir: ignikube/${pvc.metadata.name}
             mountPermissions: '0'
           reclaimPolicy: Retain
           volumeBindingMode: Immediate
