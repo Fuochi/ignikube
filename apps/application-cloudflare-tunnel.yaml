@@ -23,7 +23,7 @@ spec:
         releaseName: cloudflare-tunnel-remote
         # Still not working because of https://github.com/cloudflare/helm-charts/pull/68
         valuesObject:
-          secret: cloudflare-tunnel
+          secret: cloudflare-tunnel-remote
     - repoURL: https://github.com/Fuochi/ignikube.git
       targetRevision: main
       path: apps/cloudflare-tunnel
