@@ -1,0 +1,29 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cloudflare-tunnel
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: cloudflare
+    server: https://kubernetes.default.svc
+  project: default
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+      - ApplyOutOfSyncOnly=true
+      - FailOnSharedResource=true
+  sources:
+    - repoURL: https://cloudflare.github.io/helm-charts
+      chart: cloudflare-tunnel-remote
+      targetRevision: 0.3.2
+      helm:
+        releaseName: cloudflare-tunnel-remote
+        # Still not working because of https://github.com/cloudflare/helm-charts/pull/68
+        valuesObject:
+          secret: cloudflare-tunnel
+    - repoURL: https://github.com/Fuochi/ignikube.git
+      targetRevision: main
+      path: apps/cloudflare-tunnel
