@@ -15,8 +15,10 @@ spec:
       - CreateNamespace=true
       - ApplyOutOfSyncOnly=true
       - FailOnSharedResource=true
-  source:
-    repoURL: https://github.com/rancher/system-upgrade-controller
-    targetRevision: v0.15.2
-    path: .
-### STILL MISSING Server and Agent Plans
+  sources:
+    - repoURL: https://github.com/rancher/system-upgrade-controller
+      targetRevision: v0.15.2
+      path: .
+    - repoURL: https://github.com/Fuochi/ignikube.git
+      targetRevision: main
+      path: apps/system-upgrade-controller
