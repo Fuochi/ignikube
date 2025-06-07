@@ -18,7 +18,7 @@ spec:
   sources:
     - repoURL: https://cloudflare.github.io/helm-charts
       chart: cloudflare-tunnel-remote
-      targetRevision: 0.3.2
+      targetRevision: 0.1.2
       helm:
         releaseName: cloudflare-tunnel-remote
         # Still not working because of https://github.com/cloudflare/helm-charts/pull/68
