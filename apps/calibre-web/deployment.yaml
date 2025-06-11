@@ -27,21 +27,19 @@ spec:
             - name: TZ
               value: 'Europe/Rome'
           readinessProbe:
-            httpsGet:
+            httpGet:
               path: /login
               port: 8083
             initialDelaySeconds: 15
             periodSeconds: 30
             timeoutSeconds: 10
           livenessProbe:
-            httpsGet:
+            httpGet:
               path: /login
               port: 8083
             initialDelaySeconds: 30
             periodSeconds: 15
             timeoutSeconds: 5
-            successThreshold: 3
-            failureThreshold: 1
           volumeMounts:
             - mountPath: /config
               name: calibre-config
