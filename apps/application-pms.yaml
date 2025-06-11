@@ -1,0 +1,85 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: pms
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: plex
+    server: https://kubernetes.default.svc
+  project: default
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+      - ApplyOutOfSyncOnly=true
+      - FailOnSharedResource=true
+  sources:
+    - repoURL: https://raw.githubusercontent.com/plexinc/pms-docker/gh-pages
+      chart: plex-media-server
+      targetRevision: 1.0.2
+      helm:
+        releaseName: pms
+        valuesObject:
+          fullnameOverride: plex-media-server
+          ingress:
+            enabled: true
+            ingressClassName: nginx
+            annotations:
+              nginx.ingress.kubernetes.io/proxy-body-size: '0'
+              cert-manager.io/cluster-issuer: 'letsencrypt-issuer'
+            tls:
+              - hosts:
+                  - plex.fuochi.top
+                secretName: plex-tls
+            url: https://plex.fuochi.top
+          pms:
+            configExistingClaim: pms-config
+            resources:
+              limits:
+                memory: 512Mi
+              requests:
+                cpu: 200m
+                memory: 512Mi
+            livenessProbe:
+              httpGet:
+                path: /identity
+                port: 32400
+              initialDelaySeconds: 60
+              periodSeconds: 15
+              timeoutSeconds: 10
+            readinessProbe:
+              httpGet:
+                path: /identity
+                port: 32400
+              initialDelaySeconds: 65
+              periodSeconds: 15
+              timeoutSeconds: 5
+              successThreshold: 3
+              failureThreshold: 1
+          extraEnv:
+            TZ: 'Europe/Rome'
+            PLEX_UID: '1001'
+            PLEX_GID: '1001'
+          extraVolumes:
+            - name: movies
+              persistentVolumeClaim:
+                claimName: plex-movies
+            - name: series
+              persistentVolumeClaim:
+                claimName: plex-series
+            - name: music
+              persistentVolumeClaim:
+                claimName: plex-music
+          extraVolumeMounts:
+            - mountPath: /movies
+              name: movies
+            - mountPath: /tv
+              name: series
+            - mountPath: /music
+              name: music
+    - repoURL: https://github.com/Fuochi/ignikube.git
+      targetRevision: main
+      path: apps/pms
+      ### STILL NEED to move content pvc
