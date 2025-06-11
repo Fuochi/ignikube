@@ -1,0 +1,62 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: calibre-web
+  namespace: calibre
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: calibre-web
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: calibre-web
+    spec:
+      containers:
+        - name: calibre
+          image: linuxserver/calibre-web:0.6.24
+          env:
+            - name: PUID
+              value: '1001'
+            - name: PGID
+              value: '1001'
+            - name: TZ
+              value: 'Europe/Rome'
+          readinessProbe:
+            httpsGet:
+              path: /login
+              port: 8083
+            initialDelaySeconds: 15
+            periodSeconds: 30
+            timeoutSeconds: 10
+          livenessProbe:
+            httpsGet:
+              path: /login
+              port: 8083
+            initialDelaySeconds: 30
+            periodSeconds: 15
+            timeoutSeconds: 5
+            successThreshold: 3
+            failureThreshold: 1
+          volumeMounts:
+            - mountPath: /config
+              name: calibre-config
+            - name: ebook-library
+              mountPath: /library
+          resources:
+            requests:
+              cpu: 150m
+              memory: 250Mi
+            limits:
+              memory: 250Mi
+      volumes:
+        - name: calibre-config
+          persistentVolumeClaim:
+            claimName: calibre-config
+        - name: ebook-library
+          persistentVolumeClaim:
+            claimName: ebook-library

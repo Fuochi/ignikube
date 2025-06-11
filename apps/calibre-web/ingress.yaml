@@ -1,0 +1,30 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: calibre-web
+  namespace: calibre
+  annotations:
+    cert-manager.io/cluster-issuer: 'letsencrypt-issuer'
+    # needed to upload files
+    nginx.ingress.kubernetes.io/proxy-body-size: '0'
+    # needed to sync kobo
+    nginx.ingress.kubernetes.io/proxy-buffer-size: '1024k'
+    nginx.ingress.kubernetes.io/proxy-buffers-number: '4'
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - calibre.fuochi.top
+      secretName: calibre-tls-pub
+  rules:
+    - host: calibre.fuochi.top
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: calibre-web
+                port:
+                  number: 8083
