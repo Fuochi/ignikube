@@ -42,7 +42,7 @@ spec:
             timeoutSeconds: 5
           volumeMounts:
             - mountPath: /config
-              name: calibre-config
+              name: calibre-web-config
             - name: ebook-library
               mountPath: /library
           resources:
@@ -52,9 +52,9 @@ spec:
             limits:
               memory: 250Mi
       volumes:
-        - name: calibre-config
+        - name: calibre-web-config
           persistentVolumeClaim:
-            claimName: calibre-config
+            claimName: calibre-web-config
         - name: ebook-library
           persistentVolumeClaim:
             claimName: ebook-library
