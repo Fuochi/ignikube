@@ -15,7 +15,7 @@
     {
       "customType": "regex",
       "managerFilePatterns": [
-        "/^.*plan-.*\\.ya?ml$/"
+        "/plan-.*\\.ya?ml$/"
       ],
       "matchStrings": [
         "^\\s+version: (?<currentValue>\\S+)$"
