@@ -18,7 +18,7 @@
         "/plan-.*\\.ya?ml$/"
       ],
       "matchStrings": [
-        "^ +version: (?<currentValue>\\S+)$"
+        "\\s+version: (?<currentValue>\\S+)"
       ],
       "depNameTemplate": "k3s",
       "versioningTemplate": "regex:^v(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)(?<compatibility>\\+k3s)(?<build>\\d+)$",
