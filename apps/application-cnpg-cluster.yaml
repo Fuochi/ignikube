@@ -28,6 +28,7 @@ spec:
             shared_preload_libraries:
               - 'vectors.so'
           cluster:
+            instances: 1
             roles:
               - name: immich
                 login: true
