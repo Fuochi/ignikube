@@ -1,0 +1,45 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cnpg-cluster
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: cnpg-system
+    server: https://kubernetes.default.svc
+  project: default
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+      - ApplyOutOfSyncOnly=true
+      - FailOnSharedResource=true
+  sources:
+    - repoURL: https://cloudnative-pg.github.io/charts
+      chart: cluster
+      targetRevision: 0.3.1
+      helm:
+        releaseName: cloudnative-pg
+        valuesObject:
+          version:
+            postgres: 16.5-v0.3.0
+          postgresql:
+            shared_preload_libraries:
+              - 'vectors.so'
+          cluster:
+            roles:
+              - name: immich
+                login: true
+                passwordSecret:
+                  name: immich-pg-user
+              # - name: sonarr
+              #   login: true
+              #   passwordSecret:
+              #     name: sonarr-pg-user
+            storage:
+              size: 50Gi
+              storageClass: nfs-csi
+    - repoURL: https://github.com/Fuochi/ignikube.git
+      targetRevision: main
+      path: apps/cnpng-databases
