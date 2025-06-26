@@ -22,16 +22,16 @@ spec:
       helm:
         releaseName: immich
         valuesObject:
-          env:
-            DB_HOSTNAME: cloudnative-pg-cluster-rw.cnpg-system.svc.cluster.local
-            DB_USERNAME: immich
-            DB_DATABASE_NAME: immich
           immich:
             persistence:
               library:
                 existingClaim: photo-library
           server:
             env:
+              - name: DB_HOSTNAME
+                value: cloudnative-pg-cluster-rw.cnpg-system.svc.cluster.local
+              - name: DB_USERNAME
+                value: immich
               - name: DB_USERNAME
                 valueFrom:
                   secretKeyRef:
@@ -58,6 +58,8 @@ spec:
                     secretName: immich-tls
           machine-learning:
             enabled: false
+          redis:
+            enabled: true
     - repoURL: https://github.com/Fuochi/ignikube.git
       targetRevision: main
       path: apps/immich
