@@ -12,6 +12,7 @@ spec:
   project: default
   syncPolicy:
     syncOptions:
+      - CreateNamespace=true
       - ApplyOutOfSyncOnly=true
       - FailOnSharedResource=true
   source:
