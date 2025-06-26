@@ -15,7 +15,7 @@ spec:
       - ApplyOutOfSyncOnly=true
       - FailOnSharedResource=true
   sources:
-    - repoURL: oci://ghcr.io/immich-app/immich-charts/immich
+    - repoURL: https://immich-app.github.io/immich-charts
       chart: immich
       targetRevision: 0.9.3
       helm:
