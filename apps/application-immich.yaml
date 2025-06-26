@@ -1,0 +1,61 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: immich
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: immich
+    server: https://kubernetes.default.svc
+  project: default
+  syncPolicy:
+    syncOptions:
+      - ApplyOutOfSyncOnly=true
+      - FailOnSharedResource=true
+  sources:
+    - repoURL: oci://ghcr.io/immich-app/immich-charts/immich
+      chart: immich
+      targetRevision: 0.9.3
+      helm:
+        releaseName: immich
+        valuesObject:
+          env:
+            DB_HOSTNAME: cloudnative-pg-cluster-rw.cnpg-system.svc.cluster.local
+            DB_USERNAME: immich
+            DB_DATABASE_NAME: immich
+          persistence:
+            library:
+              existingClaim: photo-library
+          server:
+            env:
+              - name: DB_USERNAME
+                valueFrom:
+                  secretKeyRef:
+                    name: immich-pg-user
+                    key: username
+              - name: DB_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: immich-pg-user
+                    key: password
+            ingress:
+              main:
+                enabled: true
+                ingressClassName: nginx
+                annotations:
+                  cert-manager.io/cluster-issuer: letsencrypt-issuer
+                hosts:
+                  - host: immich.fuochi.top
+                    paths:
+                      - path: /
+                tls:
+                  - hosts:
+                      - immich.fuochi.top
+                    secretName: immich-tls
+          machine-learning:
+            enabled: false
+    - repoURL: https://github.com/Fuochi/ignikube.git
+      targetRevision: main
+      path: apps/immich
