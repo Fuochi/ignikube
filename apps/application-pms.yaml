@@ -65,13 +65,13 @@ spec:
           extraVolumes:
             - name: movies
               persistentVolumeClaim:
-                claimName: plex-movies
+                claimName: movies
             - name: series
               persistentVolumeClaim:
-                claimName: plex-series
+                claimName: series
             - name: music
               persistentVolumeClaim:
-                claimName: plex-music
+                claimName: music
           extraVolumeMounts:
             - mountPath: /movies
               name: movies
@@ -82,4 +82,3 @@ spec:
     - repoURL: https://github.com/Fuochi/ignikube.git
       targetRevision: main
       path: apps/pms
-      ### STILL NEED to move content pvc
