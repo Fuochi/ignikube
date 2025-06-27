@@ -10,5 +10,12 @@ spec:
   cluster:
     name: cloudnative-pg-cluster
   extensions:
+    - name: vector
+      ensure: present
+    - name: cube
+      ensure: present
     - name: vchord
+      ensure: present
+      version: 0.3.0
     - name: earthdistance
+      ensure: present
