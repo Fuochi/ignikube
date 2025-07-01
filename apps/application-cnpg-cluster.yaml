@@ -34,11 +34,20 @@ spec:
               #   login: true
               #   passwordSecret:
               #     name: sonarr-pg-user
+            resources:
+              requests:
+                memory: 512Mi
+                cpu: 200m
+              limits:
+                memory: 512Mi
             storage:
               size: 50Gi
               storageClass: nfs-csi
             postgresql:
+              parameters:
+                shared_buffers: 128MB
               shared_preload_libraries:
+                # needed by immich
                 - 'vchord.so'
     - repoURL: https://github.com/Fuochi/ignikube.git
       targetRevision: main

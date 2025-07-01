@@ -26,3 +26,9 @@ spec:
           service:
             loadBalancerIP: 192.168.1.20
             externalTrafficPolicy: Local
+          resources:
+            requests:
+              memory: 96Mi
+              cpu: 100m
+            limits:
+              memory: 96Mi

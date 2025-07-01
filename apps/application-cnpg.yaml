@@ -21,3 +21,10 @@ spec:
     targetRevision: 0.24.0
     helm:
       releaseName: cloudnative-pg
+      valuesObject:
+        resources:
+          requests:
+            memory: 64Mi
+            cpu: 10m
+          limits:
+            memory: 64Mi
