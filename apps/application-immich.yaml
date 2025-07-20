@@ -64,6 +64,9 @@ spec:
             enabled: true
           redis:
             enabled: true
+            master:
+              persistence:
+                storageClass: nfs-csi
     - repoURL: https://github.com/Fuochi/ignikube.git
       targetRevision: main
       path: apps/immich
