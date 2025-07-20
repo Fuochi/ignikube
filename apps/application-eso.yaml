@@ -17,10 +17,10 @@ spec:
       - FailOnSharedResource=true
   sources:
     - repoURL: https://charts.external-secrets.io/
-      chart: external-secrets-operator
-      targetRevision: v0.18.1
+      chart: external-secrets
+      targetRevision: v0.18.2
       helm:
-        releaseName: external-secrets-operator
+        releaseName: external-secrets
     - repoURL: https://github.com/Fuochi/ignikube.git
       targetRevision: main
       path: apps/eso
