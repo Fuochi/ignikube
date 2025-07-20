@@ -26,6 +26,8 @@ spec:
               value: '1001'
             - name: TZ
               value: 'Europe/Rome'
+            - name: DOCKER_MODS
+              value: linuxserver/calibre-web:calibre
           readinessProbe:
             httpGet:
               path: /login
