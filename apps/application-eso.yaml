@@ -15,6 +15,7 @@ spec:
       - CreateNamespace=true
       - ApplyOutOfSyncOnly=true
       - FailOnSharedResource=true
+      - ServerSideApply=true
   sources:
     - repoURL: https://charts.external-secrets.io/
       chart: external-secrets
