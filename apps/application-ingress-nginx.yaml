@@ -28,7 +28,7 @@ spec:
             externalTrafficPolicy: Local
           resources:
             requests:
-              memory: 96Mi
+              memory: 128Mi
               cpu: 100m
             limits:
-              memory: 96Mi
+              memory: 128Mi
