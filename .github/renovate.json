@@ -14,6 +14,7 @@
   "customManagers": [
     {
       "customType": "regex",
+      "description": "Update k3s version in update plans.",
       "managerFilePatterns": [
         "/plan-.*\\.ya?ml$/"
       ],
@@ -23,6 +24,16 @@
       "depNameTemplate": "k3s",
       "versioningTemplate": "regex:^v(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)(?<compatibility>\\+k3s)(?<build>\\d+)$",
       "datasourceTemplate": "custom.k3s"
+    },
+    {
+      "customType": "regex",
+      "description": "Update image version in argocd applications.",
+      "fileMatch": [
+        "^application-\\.ya?ml$"
+      ],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>[a-z-]+?)(?: depName=(?<depName>.+?))? packageName=(?<packageName>.+?)(?: versioning=(?<versioning>.+?))?\\s+tag: (?<currentValue>.+?)\\s"
+      ]
     }
   ],
   "customDatasources": {
