@@ -17,7 +17,7 @@ spec:
       - FailOnSharedResource=true
   sources:
     - repoURL: https://github.com/rancher/system-upgrade-controller
-      targetRevision: v0.16.2
+      targetRevision: v0.16.3
       path: .
     - repoURL: https://github.com/Fuochi/ignikube.git
       targetRevision: main
