@@ -5,6 +5,7 @@ kind: StorageClass
 metadata:
   name: nfs-series
 mountOptions:
+  - hard
   - nfsvers=4.2
 parameters:
   mountPermissions: '0'

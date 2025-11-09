@@ -32,6 +32,7 @@ spec:
             reclaimPolicy: Retain
             volumeBindingMode: Immediate
             mountOptions:
+              - hard
               - nfsvers=4.2
     - repoURL: https://github.com/Fuochi/ignikube.git
       targetRevision: main
