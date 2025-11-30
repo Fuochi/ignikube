@@ -24,6 +24,9 @@ spec:
         valuesObject:
           # Still not working because of https://github.com/cloudflare/helm-charts/pull/68
           secret: cloudflare-tunnel-remote
+          image:
+            # renovate: datasource=docker packageName=cloudflare/cloudflared
+            tag: 2025.11.1
           replicaCount: 1
     - repoURL: https://github.com/Fuochi/ignikube.git
       targetRevision: main
