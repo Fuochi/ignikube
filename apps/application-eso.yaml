@@ -19,7 +19,7 @@ spec:
   sources:
     - repoURL: https://charts.external-secrets.io/
       chart: external-secrets
-      targetRevision: 1.1.1
+      targetRevision: 1.2.1
       helm:
         releaseName: external-secrets
     - repoURL: https://github.com/Fuochi/ignikube.git
