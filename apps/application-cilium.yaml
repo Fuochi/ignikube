@@ -1,0 +1,31 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cilium
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: cilium
+    server: https://kubernetes.default.svc
+  project: default
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+      - ApplyOutOfSyncOnly=true
+      - FailOnSharedResource=true
+  sources:
+    - repoURL: https://helm.cilium.io
+      chart: cilium
+      targetRevision: 1.18.6
+      helm:
+        releaseName: cilium
+        valuesObject:
+          operator:
+            replicas: 1
+          envoy:
+            image:
+              repository: docker.io/apetutschnig/rpi-cilium-envoy
+              tag: 1.35.3
+              useDigest: false
