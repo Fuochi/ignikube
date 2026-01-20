@@ -4,6 +4,5 @@ kind: CiliumLoadBalancerIPPool
 metadata:
   name: first
 spec:
-  cidrs:
-    - cidr: 192.168.1.64/28
-    # - cidr: '192.168.1.16/28'
+  blocks:
+    - cidr: 192.168.1.16/28

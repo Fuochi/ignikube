@@ -4,4 +4,4 @@ kind: CiliumL2AnnouncementPolicy
 metadata:
   name: all
 spec:
-  loadBalancerIPs: true
+  externalIPs: true
