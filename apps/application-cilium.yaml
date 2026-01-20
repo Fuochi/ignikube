@@ -18,6 +18,7 @@ spec:
   sources:
     - repoURL: https://helm.cilium.io
       chart: cilium
+      # Cannot update to 1.18.x until https://github.com/cilium/cilium/issues/41996 is resolved or master kernel is updated
       targetRevision: 1.17.12
       helm:
         releaseName: cilium
@@ -29,6 +30,12 @@ spec:
               repository: docker.io/apetutschnig/rpi-cilium-envoy
               tag: 1.34.4
               useDigest: false
+
+          # Certificate managed via cronjob to avoid argocd reconciliation issues
+          hubble:
+            tls:
+              auto:
+                method: cronJob
 
           kubeProxyReplacement: true
           # K3s proxy api server in localhost:6444 on each node
