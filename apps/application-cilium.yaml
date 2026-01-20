@@ -50,6 +50,13 @@ spec:
             qps: 40
             burst: 60
 
+          gatewayAPI:
+            enabled: true
+
     - repoURL: https://github.com/Fuochi/ignikube.git
       targetRevision: main
       path: apps/cilium
+
+    - repoURL: https://github.com/kubernetes-sigs/gateway-api
+      targetRevision: v1.4.1
+      path: config/crd/standard
