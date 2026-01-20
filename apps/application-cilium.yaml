@@ -29,3 +29,8 @@ spec:
               repository: docker.io/apetutschnig/rpi-cilium-envoy
               tag: 1.35.3
               useDigest: false
+
+          kubeProxyReplacement: true
+          # K3s proxy api server in localhost:6444 on each node
+          k8sServiceHost: 127.0.0.1
+          k8sServicePort: 6444
