@@ -46,8 +46,6 @@ spec:
 
           l2announcements:
             enabled: true
-          externalIPs:
-            enabled: true
           k8sClientRateLimit:
             qps: 40
             burst: 60
