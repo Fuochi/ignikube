@@ -18,7 +18,7 @@ spec:
   sources:
     - repoURL: https://helm.cilium.io
       chart: cilium
-      targetRevision: 1.18.6
+      targetRevision: 1.17.12
       helm:
         releaseName: cilium
         valuesObject:
@@ -27,7 +27,7 @@ spec:
           envoy:
             image:
               repository: docker.io/apetutschnig/rpi-cilium-envoy
-              tag: 1.35.3
+              tag: 1.34.4
               useDigest: false
 
           kubeProxyReplacement: true
