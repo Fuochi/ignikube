@@ -12,10 +12,13 @@ spec:
   extensions:
     - name: vector
       ensure: present
+      version: '0.8.0'
     - name: cube
       ensure: present
+      version: '1.5'
     - name: vchord
       ensure: present
-      version: 0.3.0
+      version: '0.3.0'
     - name: earthdistance
       ensure: present
+      version: '1.2'
