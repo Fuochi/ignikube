@@ -89,6 +89,13 @@ spec:
               cert-manager.io/cluster-issuer: letsencrypt-issuer
             tls: true
 
+            httproute:
+              enabled: true
+              parentRefs:
+                - name: fuochi-top
+                  namespace: cilium
+                  sectionName: https
+
         ## Repo Server
         repoServer:
           resources:

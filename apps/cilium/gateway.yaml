@@ -20,5 +20,6 @@ spec:
         mode: Terminate
         certificateRefs:
           - name: star-fuochi-top-tls
+            namespace: cilium
             kind: Secret
             group: core
