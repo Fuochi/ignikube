@@ -23,6 +23,14 @@ spec:
         releaseName: pms
         valuesObject:
           fullnameOverride: plex-media-server
+          httpRoute:
+            enabled: true
+            hostnames:
+              - plex.fuochi.top
+            parentRefs:
+              - name: star-fuochi-top
+                namespace: cilium
+                sectionName: https
           ingress:
             enabled: true
             ingressClassName: nginx
