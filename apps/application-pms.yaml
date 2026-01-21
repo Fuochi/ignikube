@@ -38,10 +38,10 @@ spec:
             configExistingClaim: pms-config
             resources:
               limits:
-                memory: 512Mi
+                memory: 768Mi
               requests:
                 cpu: 200m
-                memory: 512Mi
+                memory: 768Mi
             livenessProbe:
               httpGet:
                 path: /identity
