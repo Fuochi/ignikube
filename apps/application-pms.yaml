@@ -61,7 +61,7 @@ spec:
               httpGet:
                 path: /identity
                 port: 32400
-              initialDelaySeconds: 65
+              initialDelaySeconds: 30
               periodSeconds: 15
               timeoutSeconds: 10
               successThreshold: 3
