@@ -24,6 +24,8 @@ spec:
         valuesObject:
           crds:
             enabled: true
+          config:
+            enableGatewayAPI: true
           resources:
             requests:
               cpu: 10m
