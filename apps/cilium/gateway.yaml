@@ -2,12 +2,15 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
-  name: fuochi-top
+  name: star-fuochi-top
   namespace: cilium
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-issuer
 spec:
   gatewayClassName: cilium
+  addresses:
+    - type: IPAddress
+      value: 192.168.1.16
   listeners:
     - name: https
       hostname: '*.fuochi.top'
@@ -22,4 +25,4 @@ spec:
           - name: star-fuochi-top-tls
             namespace: cilium
             kind: Secret
-            group: core
+            group: ''
