@@ -63,9 +63,9 @@ spec:
                 port: 32400
               initialDelaySeconds: 65
               periodSeconds: 15
-              timeoutSeconds: 5
+              timeoutSeconds: 10
               successThreshold: 3
-              failureThreshold: 1
+              failureThreshold: 2
           extraEnv:
             TZ: 'Europe/Rome'
             PLEX_UID: '1001'
