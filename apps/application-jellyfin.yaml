@@ -1,0 +1,56 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: pms
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: jellyfin
+    server: https://kubernetes.default.svc
+  project: default
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+      - ApplyOutOfSyncOnly=true
+      - FailOnSharedResource=true
+  sources:
+    - repoURL: https://jellyfin.github.io/jellyfin-helm
+      chart: jellyfin
+      targetRevision: 2.7.0
+      helm:
+        releaseName: jellyfin
+        valuesObject:
+          persistence:
+            config:
+              enaabled: true
+          volumes:
+            - name: movies
+              persistentVolumeClaim:
+                claimName: movies
+            - name: series
+              persistentVolumeClaim:
+                claimName: series
+          volumeMounts:
+            - mountPath: /media/movies
+              name: movies
+            - mountPath: /media/tv
+              name: series
+          httpRoute:
+            enabled: true
+            hostnames:
+              - jellyfin.fuochi.top
+            parentRefs:
+              - name: star-fuochi-top
+                namespace: cilium
+                sectionName: https
+            rules:
+              - matches:
+                path:
+                  type: PathPrefix
+                  value: /
+
+    - repoURL: https://github.com/Fuochi/ignikube.git
+      targetRevision: main
+      path: apps/jellyfin
