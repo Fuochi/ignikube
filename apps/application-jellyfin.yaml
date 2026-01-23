@@ -41,6 +41,8 @@ spec:
                 value: '500M'
               - name: JELLYFIN_PublishedServerUrl
                 value: 'https://jellyfin.fuochi.top'
+              - name: MALLOC_TRIM_THRESHOLD_
+                value: '100000'
           volumes:
             - name: movies
               persistentVolumeClaim:
