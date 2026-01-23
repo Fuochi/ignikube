@@ -24,7 +24,17 @@ spec:
         valuesObject:
           persistence:
             config:
-              enaabled: true
+              enabled: true
+            media:
+              enabled: false
+          jellyfin:
+            env:
+              - name: JELLYFIN_FFmpeg__probesize
+                value: '5G'
+              - name: JELLYFIN_FFmpeg__analyzeduration
+                value: '500M'
+              - name: JELLYFIN_PublishedServerUrl
+                value: 'https://jellyfin.fuochi.top'
           volumes:
             - name: movies
               persistentVolumeClaim:
@@ -33,9 +43,9 @@ spec:
               persistentVolumeClaim:
                 claimName: series
           volumeMounts:
-            - mountPath: /media/movies
+            - mountPath: /movies
               name: movies
-            - mountPath: /media/tv
+            - mountPath: /tv
               name: series
           httpRoute:
             enabled: true
