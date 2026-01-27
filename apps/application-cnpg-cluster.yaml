@@ -30,10 +30,10 @@ spec:
                 login: true
                 passwordSecret:
                   name: immich-pg-user
-              # - name: sonarr
-              #   login: true
-              #   passwordSecret:
-              #     name: sonarr-pg-user
+              - name: sonarr
+                login: true
+                passwordSecret:
+                  name: sonarr-pg-user
             resources:
               requests:
                 memory: 768Mi
