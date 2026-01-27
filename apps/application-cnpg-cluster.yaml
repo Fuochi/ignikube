@@ -30,10 +30,16 @@ spec:
                 login: true
                 passwordSecret:
                   name: immich-pg-user
+                connectionLimit: -1
+                ensure: present
+                inherit: true
               - name: sonarr
                 login: true
                 passwordSecret:
                   name: sonarr-pg-user
+                connectionLimit: -1
+                ensure: present
+                inherit: true
             resources:
               requests:
                 memory: 768Mi
