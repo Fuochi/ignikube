@@ -49,11 +49,16 @@ spec:
             - name: series
               persistentVolumeClaim:
                 claimName: series
+            - name: transcoding
+              persistentVolumeClaim:
+                claimName: transcoding
           volumeMounts:
             - mountPath: /movies
               name: movies
             - mountPath: /tv
               name: series
+            - mountPath: /transcoding
+              name: transcoding
           httpRoute:
             enabled: true
             hostnames:
