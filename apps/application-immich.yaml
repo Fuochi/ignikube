@@ -34,21 +34,25 @@ spec:
               library:
                 existingClaim: photo-library
           server:
-            env:
-              - name: DB_HOSTNAME
-                value: cloudnative-pg-cluster-rw.cnpg-system.svc.cluster.local
-              - name: DB_DATABASE_NAME
-                value: immich
-              - name: DB_USERNAME
-                valueFrom:
-                  secretKeyRef:
-                    name: immich-pg-user
-                    key: username
-              - name: DB_PASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    name: immich-pg-user
-                    key: password
+            controllers:
+              main:
+                containers:
+                  main:
+                    env:
+                      - name: DB_HOSTNAME
+                        value: cloudnative-pg-cluster-rw.cnpg-system.svc.cluster.local
+                      - name: DB_DATABASE_NAME
+                        value: immich
+                      - name: DB_USERNAME
+                        valueFrom:
+                          secretKeyRef:
+                            name: immich-pg-user
+                            key: username
+                      - name: DB_PASSWORD
+                        valueFrom:
+                          secretKeyRef:
+                            name: immich-pg-user
+                            key: password
             route:
               main:
                 parentRefs:
