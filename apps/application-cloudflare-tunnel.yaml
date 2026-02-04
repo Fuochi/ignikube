@@ -22,6 +22,12 @@ spec:
       helm:
         releaseName: cloudflare-tunnel-remote
         valuesObject:
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              memory: 32Mi
           # Still not working because of https://github.com/cloudflare/helm-charts/pull/68
           secret: cloudflare-tunnel-remote
           image:

@@ -57,6 +57,12 @@ spec:
                           secretKeyRef:
                             name: immich-pg-user
                             key: password
+                    resources:
+                      requests:
+                        cpu: 10m
+                        memory: 1Gi
+                      limits:
+                        memory: 1Gi
             route:
               main:
                 parentRefs:
@@ -75,6 +81,16 @@ spec:
                         port: 2283
           machine-learning:
             enabled: true
+            controllers:
+              main:
+                containers:
+                  main:
+                    resources:
+                      requests:
+                        cpu: 10m
+                        memory: 768Mi
+                      limits:
+                        memory: 768Mi
             persistence:
               cache:
                 enabled: true
@@ -83,6 +99,16 @@ spec:
                 storageClass: nfs-csi
           valkey:
             enabled: true
+            controllers:
+              main:
+                containers:
+                  main:
+                    resources:
+                      requests:
+                        cpu: 10m
+                        memory: 64Mi
+                      limits:
+                        memory: 64Mi
             persistence:
               data:
                 enabled: true

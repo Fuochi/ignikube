@@ -95,7 +95,9 @@ spec:
             hostnames:
               - deploy.fuochi.top
             parentRefs:
-              - name: star-fuochi-top
+              - group: gateway.networking.k8s.io
+                kind: Gateway
+                name: star-fuochi-top
                 namespace: cilium
                 sectionName: https
 
