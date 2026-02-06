@@ -28,7 +28,7 @@ spec:
                 main:
                   image:
                     # renovate: datasource=github-releases depName=immich packageName=immich-app/immich
-                    tag: v2.5.3
+                    tag: v2.5.5
           immich:
             persistence:
               library:
