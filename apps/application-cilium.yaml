@@ -19,7 +19,7 @@ spec:
     - repoURL: https://helm.cilium.io
       chart: cilium
       # Cannot update to 1.18.x until https://github.com/cilium/cilium/issues/41996 is resolved or master kernel is updated
-      targetRevision: 1.17.12
+      targetRevision: 1.19.1
       helm:
         releaseName: cilium
         valuesObject:
