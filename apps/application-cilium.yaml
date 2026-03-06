@@ -35,9 +35,14 @@ spec:
 
           # Certificate managed via cronjob to avoid argocd reconciliation issues
           hubble:
+            listenAddress: ':4244'
+            relay:
+              enabled: true
             tls:
               auto:
                 method: cronJob
+            ui:
+              enabled: true
 
           kubeProxyReplacement: true
           # K3s proxy api server in localhost:6444 on each node
