@@ -1,0 +1,11 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: db-radarr-main
+  namespace: cnpg-system
+spec:
+  name: radarr-main
+  owner: radarr
+  cluster:
+    name: cloudnative-pg-cluster

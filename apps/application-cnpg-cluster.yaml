@@ -42,6 +42,20 @@ spec:
                 connectionLimit: -1
                 ensure: present
                 inherit: true
+              - name: radarr
+                login: true
+                passwordSecret:
+                  name: radarr-pg-user
+                connectionLimit: -1
+                ensure: present
+                inherit: true
+              - name: prowlarr
+                login: true
+                passwordSecret:
+                  name: prowlarr-pg-user
+                connectionLimit: -1
+                ensure: present
+                inherit: true
             resources:
               requests:
                 memory: 768Mi
