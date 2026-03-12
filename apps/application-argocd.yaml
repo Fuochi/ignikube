@@ -39,7 +39,7 @@ spec:
             create: true
           params:
             create: true
-            # TLS termination on ingress
+            # TLS termination on gateway
             server.insecure: true
           rbac:
             create: true
@@ -82,13 +82,6 @@ spec:
             requests:
               cpu: 50m
               memory: 128Mi
-
-          ingress:
-            enabled: true
-            ingressClassName: nginx
-            annotations:
-              cert-manager.io/cluster-issuer: letsencrypt-issuer
-            tls: true
 
           httproute:
             enabled: true
