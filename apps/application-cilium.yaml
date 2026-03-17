@@ -58,6 +58,10 @@ spec:
           gatewayAPI:
             enabled: true
 
+          routingMode: native
+          autoDirectNodeRoutes: true
+          directRoutingSkipUnreachable: true
+
     - repoURL: https://github.com/Fuochi/ignikube.git
       targetRevision: main
       path: apps/cilium
