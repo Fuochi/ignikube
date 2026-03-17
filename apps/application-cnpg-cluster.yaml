@@ -65,6 +65,10 @@ spec:
             storage:
               size: 50Gi
               storageClass: nfs-csi
+            walStorage:
+              enabled: true
+              size: 50Gi
+              storageClass: nfs-csi
             postgresql:
               parameters:
                 shared_buffers: 128MB
