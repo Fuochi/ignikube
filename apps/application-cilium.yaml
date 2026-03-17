@@ -62,7 +62,7 @@ spec:
                     cpu: 10m
                     memory: 128Mi
                   limits:
-                    memory: 128i
+                    memory: 128Mi
 
           kubeProxyReplacement: true
           # K3s proxy api server in localhost:6444 on each node
