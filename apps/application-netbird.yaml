@@ -1,0 +1,39 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: netbird
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: netbird
+    server: https://kubernetes.default.svc
+  project: default
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+      - ApplyOutOfSyncOnly=true
+      - FailOnSharedResource=true
+  sources:
+    - repoURL: https://netbirdio.github.io/helms
+      chart: kubernetes-operator
+      targetRevision: 0.2.2
+      helm:
+        releaseName: netbird-operator
+        valuesObject:
+          netbirdAPI:
+            keyFromSecret:
+              name: 'netbird-mgmt-api-key'
+              key: 'NB_API_KEY'
+            operator:
+              resources:
+                requests:
+                  cpu: 100m
+                  memory: 128Mi
+                limits:
+                  memory: 128Mi
+
+    - repoURL: https://github.com/Fuochi/ignikube.git
+      targetRevision: main
+      path: apps/netbird
