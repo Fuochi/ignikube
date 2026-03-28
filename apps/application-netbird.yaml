@@ -24,7 +24,7 @@ spec:
         valuesObject:
           netbirdAPI:
             keyFromSecret:
-              name: 'netbird-mgmt-api-key'
+              name: 'mgmt-api-key'
               key: 'NB_API_KEY'
             operator:
               resources:
@@ -33,6 +33,15 @@ spec:
                   memory: 128Mi
                 limits:
                   memory: 128Mi
+
+    - repoURL: https://netbirdio.github.io/helms
+      chart: netbird-operator-config
+      targetRevision: 0.1.0
+      helm:
+        releaseName: netbird-operator-config
+        valuesObject:
+          router:
+            enabled: true
 
     - repoURL: https://github.com/Fuochi/ignikube.git
       targetRevision: main
