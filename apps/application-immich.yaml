@@ -59,10 +59,10 @@ spec:
                             key: password
                     resources:
                       requests:
-                        cpu: 10m
-                        memory: 1.5Gi
+                        cpu: 100m
+                        memory: 2Gi
                       limits:
-                        memory: 1.5Gi
+                        memory: 2Gi
             route:
               main:
                 parentRefs:
