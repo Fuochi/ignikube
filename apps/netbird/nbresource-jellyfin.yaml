@@ -1,0 +1,12 @@
+---
+apiVersion: netbird.io/v1
+kind: NBResource
+metadata:
+  name: jellyfin
+  namespace: netbird
+spec:
+  address: jellyfin.fuochi.top
+  groups:
+    - All
+  name: jellyfin
+  networkID: d74539ifadhs73ehl57g

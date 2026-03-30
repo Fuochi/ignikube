@@ -1,0 +1,12 @@
+---
+apiVersion: netbird.io/v1
+kind: NBResource
+metadata:
+  name: immich
+  namespace: netbird
+spec:
+  address: immich.fuochi.top
+  groups:
+    - All
+  name: immich
+  networkID: d74539ifadhs73ehl57g

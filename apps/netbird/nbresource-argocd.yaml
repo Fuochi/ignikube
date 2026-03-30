@@ -1,0 +1,12 @@
+---
+apiVersion: netbird.io/v1
+kind: NBResource
+metadata:
+  name: argocd
+  namespace: netbird
+spec:
+  address: deploy.fuochi.top
+  groups:
+    - All
+  name: argocd
+  networkID: d74539ifadhs73ehl57g
