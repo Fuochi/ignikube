@@ -34,6 +34,16 @@
       "matchStrings": [
         "# renovate: datasource=(?<datasource>[a-z-]+?)(?: depName=(?<depName>.+?))? packageName=(?<packageName>.+?)(?: versioning=(?<versioning>.+?))?\\s+tag: (?<currentValue>.+?)\\s"
       ]
+    },
+    {
+      "customType": "regex",
+      "description": "Update container image references in argocd applications.",
+      "fileMatch": [
+        "application-.*\\.ya?ml$"
+      ],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>[a-z-]+?)(?: depName=(?<depName>.+?))? packageName=(?<packageName>[^\\s]+?)(?: versioning=(?<versioning>.+?))?\\s+\\S+: [^:\\s]+:(?<currentValue>[^\\s]+)"
+      ]
     }
   ],
   "customDatasources": {
