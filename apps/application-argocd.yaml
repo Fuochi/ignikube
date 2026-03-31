@@ -52,10 +52,10 @@ spec:
         controller:
           resources:
             limits:
-              memory: 512Mi
+              memory: 768Mi
             requests:
               cpu: 250m
-              memory: 512Mi
+              memory: 768Mi
 
         ## Redis
         redis:
