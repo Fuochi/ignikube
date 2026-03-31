@@ -1,0 +1,66 @@
+---
+apiVersion: opentelemetry.io/v1beta1
+kind: OpenTelemetryCollector
+metadata:
+  name: otel-collector
+  namespace: observability
+spec:
+  mode: daemonset
+  targetAllocator:
+    enabled: true
+    prometheusCR:
+      enabled: true
+  env:
+    - name: GRAFANA_CLOUD_BASIC_AUTH_HEADER
+      valueFrom:
+        secretKeyRef:
+          name: grafanacloud-key
+          key: GRAFANA_CLOUD_BASIC_AUTH_HEADER
+    - name: GRAFANA_CLOUD_OTLP_ENDPOINT
+      valueFrom:
+        secretKeyRef:
+          name: grafanacloud-key
+          key: GRAFANA_CLOUD_OTLP_ENDPOINT
+  config:
+    receivers:
+      prometheus:
+        config:
+          global:
+            scrape_interval: 30s
+          scrape_configs: []
+      otlp:
+        protocols:
+          grpc:
+          http:
+      filelog:
+        include:
+          - /var/log/pods/*/*/*.log
+    processors:
+      batch: {}
+    exporters:
+      otlp/grafanacloud-metrics:
+        endpoint: '${GRAFANA_CLOUD_OTLP_ENDPOINT}/v1/metrics'
+        headers:
+          authorization: '${GRAFANA_CLOUD_BASIC_AUTH_HEADER}'
+      otlp/grafanacloud-traces:
+        endpoint: '${GRAFANA_CLOUD_OTLP_ENDPOINT}/v1/traces'
+        headers:
+          authorization: '${GRAFANA_CLOUD_BASIC_AUTH_HEADER}'
+      otlp/grafanacloud-logs:
+        endpoint: '${GRAFANA_CLOUD_OTLP_ENDPOINT}/v1/logs'
+        headers:
+          authorization: '${GRAFANA_CLOUD_BASIC_AUTH_HEADER}'
+    service:
+      pipelines:
+        metrics:
+          receivers: [prometheus]
+          processors: [batch]
+          exporters: [otlp/grafanacloud-metrics]
+        traces:
+          receivers: [otlp]
+          processors: [batch]
+          exporters: [otlp/grafanacloud-traces]
+        logs:
+          receivers: [filelog]
+          processors: [batch]
+          exporters: [otlp/grafanacloud-logs]
