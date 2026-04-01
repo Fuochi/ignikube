@@ -21,6 +21,8 @@ spec:
       helm:
         releaseName: csi-driver-nfs
         valuesObject:
+          controller:
+            enableSnapshotter: false
           storageClass:
             create: true
             name: nfs-csi
