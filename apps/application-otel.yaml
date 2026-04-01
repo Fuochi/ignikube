@@ -30,6 +30,7 @@ spec:
                 memory: 64Mi
               limits:
                 memory: 64Mi
+            createRbacPermissions: true
 
     - repoURL: https://prometheus-community.github.io/helm-charts
       chart: prometheus-operator-crds

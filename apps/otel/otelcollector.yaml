@@ -8,9 +8,29 @@ spec:
   mode: daemonset
   targetAllocator:
     enabled: true
+    allocationStrategy: per-node
     prometheusCR:
       enabled: true
+  volumeMounts:
+    - name: hostfs
+      mountPath: /hostfs
+      readOnly: true
+      mountPropagation: HostToContainer
+    - name: varlogpods
+      mountPath: /var/log/pods
+      readOnly: true
+  volumes:
+    - name: hostfs
+      hostPath:
+        path: /
+    - name: varlogpods
+      hostPath:
+        path: /var/log/pods
   env:
+    - name: K8S_NODE_NAME
+      valueFrom:
+        fieldRef:
+          fieldPath: spec.nodeName
     - name: GRAFANA_CLOUD_BASIC_AUTH_HEADER
       valueFrom:
         secretKeyRef:
@@ -28,39 +48,111 @@ spec:
           global:
             scrape_interval: 30s
           scrape_configs: []
+      kubeletstats:
+        collection_interval: 30s
+        auth_type: serviceAccount
+        endpoint: https://${env:K8S_NODE_NAME}:10250
+        insecure_skip_verify: true
+        metric_groups:
+          - node
+          - pod
+          - container
+      hostmetrics:
+        root_path: /hostfs
+        collection_interval: 30s
+        scrapers:
+          cpu: {}
+          memory: {}
+          disk: {}
+          filesystem: {}
+          network: {}
+          load: {}
       otlp:
         protocols:
-          grpc:
-          http:
+          grpc: {}
+          http: {}
       filelog:
         include:
           - /var/log/pods/*/*/*.log
+        exclude:
+          - /var/log/pods/observability_otel-*/**
+        include_file_path: true
+        include_file_name: false
+        operators:
+          - type: router
+            id: get-format
+            routes:
+              - output: parser-containerd
+                expr: 'body matches "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}"'
+          - type: regex_parser
+            id: parser-containerd
+            regex: '^(?P<time>[^ ]+) (?P<stream>stdout|stderr) (?P<logtag>[^ ]*) ?(?P<log>.*)$'
+            timestamp:
+              parse_from: attributes.time
+              layout: '%Y-%m-%dT%H:%M:%S.%f%j'
+          - type: move
+            from: attributes.log
+            to: body
+          - type: move
+            from: attributes.stream
+            to: attributes["log.iostream"]
+          - type: remove
+            field: attributes.logtag
     processors:
       batch: {}
+      resource/logs:
+        attributes:
+          - action: insert
+            key: loki.format
+            value: raw
+          - action: insert
+            key: k8s.cluster.name
+            value: ignikube
+      k8s_attributes:
+        auth_type: serviceAccount
+        extract:
+          metadata:
+            - k8s.namespace.name
+            - k8s.deployment.name
+            - k8s.statefulset.name
+            - k8s.daemonset.name
+            - k8s.pod.name
+            - k8s.node.name
+            - k8s.container.name
+        pod_association:
+          - sources:
+              - from: resource_attribute
+                name: k8s.pod.ip
+          - sources:
+              - from: connection
+      resourcedetection:
+        detectors: [env, system]
+        timeout: 5s
+        override: false
     exporters:
-      otlp/grafanacloud-metrics:
-        endpoint: '${GRAFANA_CLOUD_OTLP_ENDPOINT}/v1/metrics'
+      otlp_http/grafanacloud-metrics:
+        endpoint: '${GRAFANA_CLOUD_OTLP_ENDPOINT}/otlp'
         headers:
           authorization: '${GRAFANA_CLOUD_BASIC_AUTH_HEADER}'
-      otlp/grafanacloud-traces:
-        endpoint: '${GRAFANA_CLOUD_OTLP_ENDPOINT}/v1/traces'
+      otlp_http/grafanacloud-traces:
+        endpoint: '${GRAFANA_CLOUD_OTLP_ENDPOINT}/otlp'
         headers:
           authorization: '${GRAFANA_CLOUD_BASIC_AUTH_HEADER}'
-      otlp/grafanacloud-logs:
-        endpoint: '${GRAFANA_CLOUD_OTLP_ENDPOINT}/v1/logs'
+      otlp_http/grafanacloud-logs:
+        endpoint: '${GRAFANA_CLOUD_OTLP_ENDPOINT}/otlp'
         headers:
           authorization: '${GRAFANA_CLOUD_BASIC_AUTH_HEADER}'
     service:
       pipelines:
         metrics:
-          receivers: [prometheus]
-          processors: [batch]
-          exporters: [otlp/grafanacloud-metrics]
+          receivers: [prometheus, kubeletstats, hostmetrics]
+          processors: [k8s_attributes, resourcedetection, batch]
+          exporters: [otlp_http/grafanacloud-metrics]
         traces:
           receivers: [otlp]
-          processors: [batch]
-          exporters: [otlp/grafanacloud-traces]
+          processors: [k8s_attributes, resourcedetection, batch]
+          exporters: [otlp_http/grafanacloud-traces]
         logs:
           receivers: [filelog]
-          processors: [batch]
-          exporters: [otlp/grafanacloud-logs]
+          processors: [k8s_attributes, resource/logs, resourcedetection, batch]
+          exporters: [otlp_http/grafanacloud-logs]
