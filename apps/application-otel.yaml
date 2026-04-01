@@ -38,6 +38,7 @@ spec:
       helm:
         releaseName: prometheus-operator-crds
 
+    # TODO: check if opentelemetry-collector and/or opentelemetry-target-allocator helm charts can be used instead
     - repoURL: https://github.com/Fuochi/ignikube.git
       targetRevision: main
       path: apps/otel

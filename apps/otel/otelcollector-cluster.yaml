@@ -1,0 +1,46 @@
+---
+apiVersion: opentelemetry.io/v1beta1
+kind: OpenTelemetryCollector
+metadata:
+  name: otel-cluster-metrics
+  namespace: observability
+spec:
+  mode: deployment
+  replicas: 1
+  env:
+    - name: GRAFANA_CLOUD_BASIC_AUTH_HEADER
+      valueFrom:
+        secretKeyRef:
+          name: grafanacloud-key
+          key: GRAFANA_CLOUD_BASIC_AUTH_HEADER
+    - name: GRAFANA_CLOUD_OTLP_ENDPOINT
+      valueFrom:
+        secretKeyRef:
+          name: grafanacloud-key
+          key: GRAFANA_CLOUD_OTLP_ENDPOINT
+  config:
+    receivers:
+      k8s_cluster:
+        collection_interval: 30s
+        node_conditions_to_report:
+          - Ready
+          - MemoryPressure
+          - DiskPressure
+          - PIDPressure
+        allocatable_types_to_report:
+          - cpu
+          - memory
+          - storage
+    processors:
+      batch: {}
+    exporters:
+      otlp_http/grafanacloud-metrics:
+        endpoint: '${GRAFANA_CLOUD_OTLP_ENDPOINT}/otlp'
+        headers:
+          authorization: '${GRAFANA_CLOUD_BASIC_AUTH_HEADER}'
+    service:
+      pipelines:
+        metrics:
+          receivers: [k8s_cluster]
+          processors: [batch]
+          exporters: [otlp_http/grafanacloud-metrics]
