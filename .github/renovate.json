@@ -44,6 +44,19 @@
       "matchStrings": [
         "# renovate: datasource=(?<datasource>[a-z-]+?)(?: depName=(?<depName>.+?))? packageName=(?<packageName>[^\\s]+?)(?: versioning=(?<versioning>.+?))?\\s+\\S+: [^:\\s]+:(?<currentValue>[^\\s]+)"
       ]
+    },
+    {
+      "customType": "regex",
+      "description": "Update Grafana dashboard revisions in GrafanaDashboard CRs.",
+      "fileMatch": [
+        "dashboard-.*\\.ya?ml$"
+      ],
+      "matchStrings": [
+        "grafanaCom:\\s+id:\\s+(?<packageName>\\d+)\\s+revision:\\s+(?<currentValue>\\d+)"
+      ],
+      "depNameTemplate": "grafana-dashboard-{{packageName}}",
+      "versioningTemplate": "regex:^(?<major>\\d+)$",
+      "datasourceTemplate": "custom.grafana-dashboards"
     }
   ],
   "customDatasources": {
@@ -51,6 +64,13 @@
       "defaultRegistryUrlTemplate": "https://update.k3s.io/v1-release/channels",
       "transformTemplates": [
         "{\"releases\":[{\"version\": $$.(data[id = 'stable'].latest),\"sourceUrl\":\"https://github.com/k3s-io/k3s\",\"changelogUrl\":$join([\"https://github.com/k3s-io/k3s/releases/tag/\",data[id = 'stable'].latest])}],\"sourceUrl\": \"https://github.com/k3s-io/k3s\",\"homepage\": \"https://k3s.io/\"}"
+      ]
+    },
+    "grafana-dashboards": {
+      "defaultRegistryUrlTemplate": "https://grafana.com/api/dashboards/{{packageName}}",
+      "format": "json",
+      "transformTemplates": [
+        "{\"releases\":[{\"version\": $string(revision)}]}"
       ]
     }
   }
