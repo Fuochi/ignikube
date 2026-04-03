@@ -23,6 +23,8 @@ spec:
       helm:
         releaseName: external-secrets
         valuesObject:
+          serviceMonitor:
+            enabled: true
           resources:
             requests:
               cpu: 5m

@@ -24,6 +24,8 @@ spec:
         releaseName: otel-operator
         valuesObject:
           manager:
+            serviceMonitor:
+              enabled: true
             resources:
               requests:
                 cpu: 10m

@@ -25,6 +25,9 @@ spec:
         valuesObject:
           crds:
             enabled: true
+          prometheus:
+            servicemonitor:
+              enabled: true
           config:
             enableGatewayAPI: true
           resources:

@@ -23,6 +23,8 @@ spec:
         releaseName: cloudnative-pg
         valuesObject:
           cluster:
+            monitoring:
+              enabled: true
             podSecurityContext:
               fsGroupChangePolicy: 'OnRootMismatch'
             instances: 1
