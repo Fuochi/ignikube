@@ -59,19 +59,20 @@ spec:
               name: series
             - mountPath: /transcoding
               name: transcoding
-          httpRoute:
-            enabled: true
-            hostnames:
-              - jellyfin.fuochi.top
-            parentRefs:
-              - name: star-fuochi-top
-                namespace: cilium
-                sectionName: https
-            rules:
-              - matches:
-                path:
-                  type: PathPrefix
-                  value: /
+          # httoRoute is broken in V3.0.0. Waiting for https://github.com/jellyfin/jellyfin-helm/issues/131
+          # httpRoute:
+          #   enabled: true
+          #   hostnames:
+          #     - jellyfin.fuochi.top
+          #   parentRefs:
+          #     - name: star-fuochi-top
+          #       namespace: cilium
+          #       sectionName: https
+          #   rules:
+          #     - matches:
+          #       path:
+          #         type: PathPrefix
+          #         value: /
 
     - repoURL: https://github.com/Fuochi/ignikube.git
       targetRevision: main
