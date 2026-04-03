@@ -50,6 +50,10 @@ spec:
 
         ## Application controller
         controller:
+          metrics:
+            enabled: true
+            serviceMonitor:
+              enabled: true
           resources:
             limits:
               memory: 768Mi
@@ -59,6 +63,12 @@ spec:
 
         ## Redis
         redis:
+          metrics:
+            enabled: true
+            serviceMonitor:
+              enabled: true
+          exporter:
+            enabled: true
           readinessProbe:
             enabled: true
           livenessProbe:
@@ -76,6 +86,10 @@ spec:
 
         ## Server
         server:
+          metrics:
+            enabled: true
+            serviceMonitor:
+              enabled: true
           resources:
             limits:
               memory: 128Mi
@@ -96,6 +110,10 @@ spec:
 
         ## Repo Server
         repoServer:
+          metrics:
+            enabled: true
+            serviceMonitor:
+              enabled: true
           resources:
             limits:
               memory: 256Mi
@@ -118,6 +136,10 @@ spec:
 
         ## ApplicationSet controller
         applicationSet:
+          metrics:
+            enabled: true
+            serviceMonitor:
+              enabled: true
           resources:
             limits:
               memory: 64Mi
