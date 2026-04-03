@@ -52,9 +52,8 @@
         "dashboard-.*\\.ya?ml$"
       ],
       "matchStrings": [
-        "grafanaCom:\\s+id:\\s+(?<packageName>\\d+)\\s+revision:\\s+(?<currentValue>\\d+)"
+        "metadata:\\s+name:\\s+(?<depName>\\S+)[\\s\\S]*?grafanaCom:\\s+id:\\s+(?<packageName>\\d+)\\s+revision:\\s+(?<currentValue>\\d+)"
       ],
-      "depNameTemplate": "grafana-dashboard-{{packageName}}",
       "versioningTemplate": "regex:^(?<major>\\d+)$",
       "datasourceTemplate": "custom.grafana-dashboards"
     }
