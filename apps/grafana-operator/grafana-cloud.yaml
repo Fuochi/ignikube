@@ -1,0 +1,14 @@
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: Grafana
+metadata:
+  name: grafana-cloud
+  namespace: observability
+  labels:
+    dashboards: grafana-cloud
+spec:
+  external:
+    url: https://fuochi.grafana.net
+    apiKey:
+      name: grafana-operator-token
+      key: GRAFANA_CLOUD_SA_TOKEN

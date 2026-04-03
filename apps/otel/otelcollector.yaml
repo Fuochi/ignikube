@@ -11,6 +11,8 @@ spec:
     allocationStrategy: per-node
     prometheusCR:
       enabled: true
+      serviceMonitorSelector: {}
+      podMonitorSelector: {}
   volumeMounts:
     - name: hostfs
       mountPath: /hostfs
