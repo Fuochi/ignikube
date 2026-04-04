@@ -10,4 +10,4 @@ spec:
       dashboards: grafana-cloud
   grafanaCom:
     id: 15759
-    revision: 36
+    revision: 40
