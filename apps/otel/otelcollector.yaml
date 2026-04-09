@@ -64,6 +64,7 @@ spec:
                   action: keep
                 - regex: 'id'
                   action: labeldrop
+      hostmetrics: {}
       otlp:
         protocols:
           grpc: {}
