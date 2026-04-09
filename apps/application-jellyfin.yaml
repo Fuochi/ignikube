@@ -67,11 +67,6 @@ spec:
               - name: star-fuochi-top
                 namespace: cilium
                 sectionName: https
-            rules:
-              - matches:
-                path:
-                  type: PathPrefix
-                  value: /
 
     - repoURL: https://github.com/Fuochi/ignikube.git
       targetRevision: main
