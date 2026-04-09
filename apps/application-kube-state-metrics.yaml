@@ -22,6 +22,14 @@ spec:
       helm:
         releaseName: kube-state-metrics
         valuesObject:
+          collectors:
+            - daemonsets
+            - deployments
+            - namespaces
+            - nodes
+            - pods
+            - replicasets
+            - statefulsets
           prometheus:
             monitor:
               enabled: true

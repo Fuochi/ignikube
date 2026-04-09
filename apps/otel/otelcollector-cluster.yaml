@@ -32,6 +32,11 @@ spec:
           - memory
           - storage
     processors:
+      transform/cluster:
+        metric_statements:
+          - context: datapoint
+            statements:
+              - set(attributes["cluster"], "ignikube")
       batch: {}
     exporters:
       otlp_http/grafanacloud-metrics:
@@ -42,5 +47,5 @@ spec:
       pipelines:
         metrics:
           receivers: [k8s_cluster]
-          processors: [batch]
+          processors: [transform/cluster, batch]
           exporters: [otlp_http/grafanacloud-metrics]

@@ -8,6 +8,7 @@ rules:
     resources:
       - nodes/stats
       - nodes/proxy
+      - nodes/metrics
     verbs: ['get']
   - apiGroups: ['']
     resources:

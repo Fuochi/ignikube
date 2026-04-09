@@ -23,17 +23,8 @@ spec:
       helm:
         releaseName: cilium
         valuesObject:
-          prometheus:
-            enabled: true
-            serviceMonitor:
-              enabled: true
-
           operator:
             replicas: 1
-            prometheus:
-              enabled: true
-              serviceMonitor:
-                enabled: true
 
           envoy:
             # Use custom envoy image for raspberry pi support
@@ -44,16 +35,6 @@ spec:
 
           # Certificate managed via cronjob to avoid argocd reconciliation issues
           hubble:
-            metrics:
-              enabled:
-                - dns
-                - drop
-                - tcp
-                - flow
-                - icmp
-                - http
-              serviceMonitor:
-                enabled: true
             listenAddress: ':4244'
             relay:
               enabled: true

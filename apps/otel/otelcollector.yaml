@@ -14,17 +14,10 @@ spec:
       serviceMonitorSelector: {}
       podMonitorSelector: {}
   volumeMounts:
-    - name: hostfs
-      mountPath: /hostfs
-      readOnly: true
-      mountPropagation: HostToContainer
     - name: varlogpods
       mountPath: /var/log/pods
       readOnly: true
   volumes:
-    - name: hostfs
-      hostPath:
-        path: /
     - name: varlogpods
       hostPath:
         path: /var/log/pods
@@ -49,26 +42,28 @@ spec:
         config:
           global:
             scrape_interval: 30s
-          scrape_configs: []
-      kubeletstats:
-        collection_interval: 30s
-        auth_type: serviceAccount
-        endpoint: https://${env:K8S_NODE_NAME}:10250
-        insecure_skip_verify: true
-        metric_groups:
-          - node
-          - pod
-          - container
-      hostmetrics:
-        root_path: /hostfs
-        collection_interval: 30s
-        scrapers:
-          cpu: {}
-          memory: {}
-          disk: {}
-          filesystem: {}
-          network: {}
-          load: {}
+          scrape_configs:
+            - job_name: kubelet-cadvisor
+              scheme: https
+              tls_config:
+                insecure_skip_verify: true
+              bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+              metrics_path: /metrics/cadvisor
+              kubernetes_sd_configs:
+                - role: node
+              relabel_configs:
+                - action: replace
+                  source_labels: [__meta_kubernetes_node_name]
+                  target_label: node
+              metric_relabel_configs:
+                - source_labels: [container]
+                  regex: 'POD'
+                  action: drop
+                - source_labels: [__name__]
+                  regex: 'container_(cpu_usage_seconds_total|cpu_cfs_throttled_periods_total|cpu_cfs_periods_total|memory_working_set_bytes|memory_usage_bytes|network_receive_bytes_total|network_transmit_bytes_total|fs_reads_bytes_total|fs_writes_bytes_total)|machine_memory_bytes'
+                  action: keep
+                - regex: 'id'
+                  action: labeldrop
       otlp:
         protocols:
           grpc: {}
@@ -102,6 +97,11 @@ spec:
             field: attributes.logtag
     processors:
       batch: {}
+      transform/cluster:
+        metric_statements:
+          - context: datapoint
+            statements:
+              - set(attributes["cluster"], "ignikube")
       resource/logs:
         attributes:
           - action: insert
@@ -147,8 +147,9 @@ spec:
     service:
       pipelines:
         metrics:
-          receivers: [prometheus, kubeletstats, hostmetrics]
-          processors: [k8s_attributes, resourcedetection, batch]
+          receivers: [prometheus]
+          processors:
+            [k8s_attributes, resourcedetection, transform/cluster, batch]
           exporters: [otlp_http/grafanacloud-metrics]
         traces:
           receivers: [otlp]
