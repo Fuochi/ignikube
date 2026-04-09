@@ -14,10 +14,17 @@ spec:
       serviceMonitorSelector: {}
       podMonitorSelector: {}
   volumeMounts:
+    - name: hostfs
+      mountPath: /hostfs
+      readOnly: true
+      mountPropagation: HostToContainer
     - name: varlogpods
       mountPath: /var/log/pods
       readOnly: true
   volumes:
+    - name: hostfs
+      hostPath:
+        path: /
     - name: varlogpods
       hostPath:
         path: /var/log/pods
@@ -49,12 +56,10 @@ spec:
                 insecure_skip_verify: true
               bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
               metrics_path: /metrics/cadvisor
-              kubernetes_sd_configs:
-                - role: node
-              relabel_configs:
-                - action: replace
-                  source_labels: [__meta_kubernetes_node_name]
-                  target_label: node
+              static_configs:
+                - targets: ['${env:K8S_NODE_NAME}:10250']
+                  labels:
+                    node: '${env:K8S_NODE_NAME}'
               metric_relabel_configs:
                 - source_labels: [container]
                   regex: 'POD'
@@ -64,7 +69,6 @@ spec:
                   action: keep
                 - regex: 'id'
                   action: labeldrop
-      hostmetrics: {}
       otlp:
         protocols:
           grpc: {}
@@ -98,6 +102,12 @@ spec:
             field: attributes.logtag
     processors:
       batch: {}
+      filter/metrics:
+        metrics:
+          metric:
+            # Drop operator-injected hostmetrics and kubeletstats metrics
+            # (node-exporter and cAdvisor already cover these)
+            - IsMatch(name, "^(system\\.|process\\.|k8s\\.|container\\.)")
       transform/cluster:
         metric_statements:
           - context: datapoint
@@ -150,7 +160,13 @@ spec:
         metrics:
           receivers: [prometheus]
           processors:
-            [k8s_attributes, resourcedetection, transform/cluster, batch]
+            [
+              k8s_attributes,
+              resourcedetection,
+              filter/metrics,
+              transform/cluster,
+              batch,
+            ]
           exporters: [otlp_http/grafanacloud-metrics]
         traces:
           receivers: [otlp]
