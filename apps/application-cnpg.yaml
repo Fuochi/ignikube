@@ -23,8 +23,6 @@ spec:
     helm:
       releaseName: cloudnative-pg
       valuesObject:
-        monitoring:
-          podMonitorEnabled: true
         resources:
           requests:
             memory: 64Mi

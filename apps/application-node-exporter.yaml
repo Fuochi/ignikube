@@ -22,6 +22,15 @@ spec:
       helm:
         releaseName: node-exporter
         valuesObject:
+          extraArgs:
+            - --collector.disable-defaults
+            - --collector.cpu
+            - --collector.loadavg
+            - --collector.meminfo
+            - --collector.filesystem
+            - --collector.netdev
+            - --collector.diskstats
+            - --collector.uname
           prometheus:
             monitor:
               enabled: true
