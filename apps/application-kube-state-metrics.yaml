@@ -30,6 +30,23 @@ spec:
             - pods
             - replicasets
             - statefulsets
+          metricAllowlist:
+            - kube_daemonset_status_(desired|ready)_number_scheduled
+            - kube_deployment_(status_replicas|spec_replicas)
+            - kube_deployment_status_replicas_(available|unavailable|updated)
+            - kube_namespace_status_phase
+            - kube_node_info
+            - kube_node_status_(condition|allocatable|capacity)
+            - kube_pod_info
+            - kube_pod_owner
+            - kube_pod_status_(phase|ready|scheduled)
+            - kube_pod_container_(info|status_ready|status_restarts_total)
+            - kube_pod_container_resource_(requests|limits)
+            - kube_pod_container_status_(running|waiting|terminated)
+            - kube_pod_container_status_last_terminated_reason
+            - kube_replicaset_owner
+            - kube_statefulset_(status_replicas|replicas)
+            - kube_statefulset_status_replicas_(ready|updated)
           prometheus:
             monitor:
               enabled: true
