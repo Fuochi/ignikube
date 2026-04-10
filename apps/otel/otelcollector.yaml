@@ -6,9 +6,21 @@ metadata:
   namespace: observability
 spec:
   mode: daemonset
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      memory: 128Mi
   targetAllocator:
     enabled: true
     allocationStrategy: per-node
+    resources:
+      requests:
+        cpu: 5m
+        memory: 64Mi
+      limits:
+        memory: 64Mi
     prometheusCR:
       enabled: true
       serviceMonitorSelector: {}

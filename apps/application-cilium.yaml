@@ -25,6 +25,12 @@ spec:
         valuesObject:
           operator:
             replicas: 1
+            resources:
+              requests:
+                cpu: 5m
+                memory: 64Mi
+              limits:
+                memory: 64Mi
 
           envoy:
             # Use custom envoy image for raspberry pi support
@@ -32,6 +38,12 @@ spec:
               repository: docker.io/apetutschnig/rpi-cilium-envoy
               tag: 1.35.3
               useDigest: false
+            resources:
+              requests:
+                cpu: 5m
+                memory: 48Mi
+              limits:
+                memory: 48Mi
 
           # Certificate managed via cronjob to avoid argocd reconciliation issues
           hubble:
@@ -63,6 +75,13 @@ spec:
                     memory: 128Mi
                   limits:
                     memory: 128Mi
+
+          resources:
+            requests:
+              cpu: 50m
+              memory: 256Mi
+            limits:
+              memory: 256Mi
 
           kubeProxyReplacement: true
           # K3s proxy api server in localhost:6444 on each node

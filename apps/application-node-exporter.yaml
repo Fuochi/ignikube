@@ -34,3 +34,9 @@ spec:
           prometheus:
             monitor:
               enabled: true
+          resources:
+            requests:
+              cpu: 5m
+              memory: 32Mi
+            limits:
+              memory: 32Mi

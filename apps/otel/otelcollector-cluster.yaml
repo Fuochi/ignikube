@@ -7,6 +7,12 @@ metadata:
 spec:
   mode: deployment
   replicas: 1
+  resources:
+    requests:
+      cpu: 5m
+      memory: 64Mi
+    limits:
+      memory: 64Mi
   env:
     - name: GRAFANA_CLOUD_BASIC_AUTH_HEADER
       valueFrom:

@@ -25,6 +25,12 @@ spec:
           config:
             persistence:
               storageClass: nfs-csi
+          resources:
+            requests:
+              cpu: 10m
+              memory: 256Mi
+            limits:
+              memory: 256Mi
           route:
             main:
               enabled: true
