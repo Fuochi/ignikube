@@ -34,7 +34,7 @@ spec:
               limits:
                 memory: 32Mi
           # renovate: datasource=docker packageName=netbirdio/netbird
-          routingClientImage: netbirdio/netbird:0.68.3-rootless
+          routingClientImage: netbirdio/netbird:0.69.0-rootless
 
     - repoURL: https://netbirdio.github.io/helms
       chart: netbird-operator-config
