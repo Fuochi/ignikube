@@ -24,3 +24,15 @@ spec:
       compression: gzip
       jobs: 1
       immediateCheckpoint: false
+  # Because of https://github.com/cloudnative-pg/plugin-barman-cloud/pull/398
+  # Required for Garage <= 1.0.1 (and several other S3-compatibles):
+  # boto3 ≥ Jan 2025 defaults to streaming SHA256/CRC32 checksums,
+  # which Garage cannot parse (treats "STREAMING-AWS4-..." as hex).
+  # Track: https://git.deuxfleurs.fr/Deuxfleurs/garage/issues/824
+  # Remove once Garage supports STREAMING-UNSIGNED-PAYLOAD-TRAILER.
+  instanceSidecarConfiguration:
+    env:
+      - name: AWS_REQUEST_CHECKSUM_CALCULATION
+        value: when_required
+      - name: AWS_RESPONSE_CHECKSUM_VALIDATION
+        value: when_required
