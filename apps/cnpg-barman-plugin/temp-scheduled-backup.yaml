@@ -1,0 +1,17 @@
+---
+# TO BE DELETED AFTER https://github.com/cloudnative-pg/charts/pull/838
+apiVersion: postgresql.cnpg.io/v1
+kind: ScheduledBackup
+metadata:
+  name: cnpg-weekly
+  namespace: cnpg-system
+spec:
+  cluster:
+    name: cloudnative-pg-cluster
+  schedule: "0 0 3 * * 0" # 6-field cron: Sun 03:00 UTC
+  method: plugin
+  pluginConfiguration:
+    name: barman-cloud.cloudnative-pg.io
+  backupOwnerReference: self
+  immediate: false
+  suspend: false

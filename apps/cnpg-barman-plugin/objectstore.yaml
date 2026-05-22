@@ -1,0 +1,26 @@
+---
+# MAY BE MOVED/DELETED AFTER https://github.com/cloudnative-pg/charts/pull/838
+apiVersion: barmancloud.cnpg.io/v1
+kind: ObjectStore
+metadata:
+  name: cnpg-backups
+  namespace: cnpg-system
+spec:
+  retentionPolicy: "30d"
+  configuration:
+    destinationPath: s3://cnpg-backups/cluster
+    endpointURL: https://s3.fuochi.top
+    s3Credentials:
+      accessKeyId:
+        name: garage-cnpg-creds
+        key: AWS_ACCESS_KEY_ID
+      secretAccessKey:
+        name: garage-cnpg-creds
+        key: AWS_SECRET_ACCESS_KEY
+    wal:
+      compression: gzip
+      maxParallel: 1
+    data:
+      compression: gzip
+      jobs: 1
+      immediateCheckpoint: false
