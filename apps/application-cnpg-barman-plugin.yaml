@@ -2,7 +2,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: cnpg-cluster
+  name: cnpg-cluster-barman-plugin
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
