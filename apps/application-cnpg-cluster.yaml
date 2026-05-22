@@ -77,4 +77,4 @@ spec:
                 - 'vchord.so'
     - repoURL: https://github.com/Fuochi/ignikube.git
       targetRevision: main
-      path: apps/cnpng-databases
+      path: apps/cnpg-databases

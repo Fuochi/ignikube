@@ -14,9 +14,13 @@ spec:
     syncOptions:
       - CreateNamespace=false
       - ServerSideApply=true
-  source:
-    repoURL: https://cloudnative-pg.github.io/charts
-    chart: plugin-barman-cloud
-    targetRevision: 0.6.0
-    helm:
-      releaseName: barman-cloud
+  sources:
+    - repoURL: https://cloudnative-pg.github.io/charts
+      chart: plugin-barman-cloud
+      targetRevision: 0.6.0
+      helm:
+        releaseName: barman-cloud
+
+    - repoURL: https://github.com/Fuochi/ignikube.git
+      targetRevision: main
+      path: apps/cnpg-barman-plugin
