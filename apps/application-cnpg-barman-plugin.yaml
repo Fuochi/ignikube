@@ -1,0 +1,22 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cnpg-cluster
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: cnpg-system
+    server: https://kubernetes.default.svc
+  project: default
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=false
+      - ServerSideApply=true
+  source:
+    repoURL: https://cloudnative-pg.github.io/plugin-barman-cloud
+    chart: plugin-barman-cloud
+    targetRevision: 0.6.0
+    helm:
+      releaseName: barman-cloud
