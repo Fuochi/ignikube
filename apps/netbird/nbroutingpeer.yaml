@@ -1,0 +1,13 @@
+---
+apiVersion: netbird.io/v1
+kind: NBRoutingPeer
+metadata:
+  name: router
+  namespace: netbird
+spec:
+  resources:
+    limits:
+      memory: 192Mi
+    requests:
+      cpu: 100m
+      memory: 192Mi

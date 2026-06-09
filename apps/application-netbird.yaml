@@ -16,9 +16,9 @@ spec:
       - ApplyOutOfSyncOnly=true
       - FailOnSharedResource=true
   sources:
-    - repoURL: https://netbirdio.github.io/helms
-      chart: kubernetes-operator
-      targetRevision: 0.3.1
+    - repoURL: ghcr.io/netbirdio/helm-charts
+      chart: netbird-operator
+      targetRevision: 0.6.0
       helm:
         releaseName: netbird-operator
         valuesObject:
@@ -35,21 +35,6 @@ spec:
                 memory: 32Mi
           # renovate: datasource=docker packageName=netbirdio/netbird
           routingClientImage: netbirdio/netbird:0.72.2-rootless
-
-    - repoURL: https://netbirdio.github.io/helms
-      chart: netbird-operator-config
-      targetRevision: 0.1.0
-      helm:
-        releaseName: netbird-operator-config
-        valuesObject:
-          router:
-            enabled: true
-            resources:
-              requests:
-                cpu: 100m
-                memory: 192Mi
-              limits:
-                memory: 192Mi
 
     - repoURL: https://github.com/Fuochi/ignikube.git
       targetRevision: main
