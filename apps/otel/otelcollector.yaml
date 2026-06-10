@@ -61,6 +61,11 @@ spec:
         config:
           global:
             scrape_interval: 30s
+          scrape_configs: []
+      prometheus/cadvisor:
+        config:
+          global:
+            scrape_interval: 30s
           scrape_configs:
             - job_name: kubelet-cadvisor
               scheme: https
@@ -77,7 +82,7 @@ spec:
                   regex: 'POD'
                   action: drop
                 - source_labels: [__name__]
-                  regex: 'container_(cpu_usage_seconds_total|cpu_cfs_throttled_periods_total|cpu_cfs_periods_total|memory_working_set_bytes|memory_usage_bytes|network_receive_bytes_total|network_transmit_bytes_total|fs_reads_bytes_total|fs_writes_bytes_total)|machine_memory_bytes'
+                  regex: 'container_.*|machine_memory_bytes'
                   action: keep
                 - regex: 'id'
                   action: labeldrop
@@ -93,6 +98,26 @@ spec:
         include_file_path: true
         include_file_name: false
         operators:
+          # Extract namespace, pod name, uid, and container from file path
+          # Path format: /var/log/pods/<namespace>_<pod-name>_<pod-uid>/<container>/<restart>.log
+          - type: regex_parser
+            id: extract-metadata-from-filepath
+            regex: '^.*\/(?P<namespace>[^_]+)_(?P<pod_name>[^_]+)_(?P<uid>[a-f0-9\-]+)\/(?P<container_name>[^\/]+)\/.*\.log$'
+            parse_from: attributes["log.file.path"]
+            cache:
+              size: 128
+          - type: move
+            from: attributes.namespace
+            to: resource["k8s.namespace.name"]
+          - type: move
+            from: attributes.pod_name
+            to: resource["k8s.pod.name"]
+          - type: move
+            from: attributes.uid
+            to: resource["k8s.pod.uid"]
+          - type: move
+            from: attributes.container_name
+            to: resource["k8s.container.name"]
           - type: router
             id: get-format
             routes:
@@ -118,13 +143,20 @@ spec:
         metrics:
           metric:
             # Drop operator-injected hostmetrics and kubeletstats metrics
-            # (node-exporter and cAdvisor already cover these)
-            - IsMatch(name, "^(system\\.|process\\.|k8s\\.|container\\.)")
+            # (keep cAdvisor container_* metrics which become container.* in OTLP)
+            - IsMatch(name, "^(system\\.|process\\.|k8s\\.)")
       transform/cluster:
         metric_statements:
           - context: datapoint
             statements:
               - set(attributes["cluster"], "ignikube")
+              # Fix kube-state-metrics labels: swap exported_* back to original
+              - set(attributes["namespace"], attributes["exported_namespace"]) where attributes["exported_namespace"] != nil
+              - delete_key(attributes, "exported_namespace") where attributes["exported_namespace"] != nil
+              - set(attributes["pod"], attributes["exported_pod"]) where attributes["exported_pod"] != nil
+              - delete_key(attributes, "exported_pod") where attributes["exported_pod"] != nil
+              - set(attributes["container"], attributes["exported_container"]) where attributes["exported_container"] != nil
+              - delete_key(attributes, "exported_container") where attributes["exported_container"] != nil
       resource/logs:
         attributes:
           - action: insert
@@ -133,6 +165,15 @@ spec:
           - action: insert
             key: k8s.cluster.name
             value: ignikube
+      transform/logs:
+        log_statements:
+          - context: resource
+            statements:
+              # Set service.name from workload name if not set by k8s labels
+              - set(attributes["service.name"], attributes["k8s.deployment.name"]) where attributes["service.name"] == nil and attributes["k8s.deployment.name"] != nil
+              - set(attributes["service.name"], attributes["k8s.daemonset.name"]) where attributes["service.name"] == nil and attributes["k8s.daemonset.name"] != nil
+              - set(attributes["service.name"], attributes["k8s.statefulset.name"]) where attributes["service.name"] == nil and attributes["k8s.statefulset.name"] != nil
+              - set(attributes["service.name"], attributes["k8s.pod.name"]) where attributes["service.name"] == nil and attributes["k8s.pod.name"] != nil
       k8s_attributes:
         auth_type: serviceAccount
         extract:
@@ -141,15 +182,26 @@ spec:
             - k8s.deployment.name
             - k8s.statefulset.name
             - k8s.daemonset.name
+            - k8s.replicaset.name
             - k8s.pod.name
             - k8s.node.name
             - k8s.container.name
+          labels:
+            - tag_name: service.name
+              key: app.kubernetes.io/name
+              from: pod
+            - tag_name: app.component
+              key: app.kubernetes.io/component
+              from: pod
         pod_association:
           - sources:
               - from: resource_attribute
-                name: k8s.pod.ip
+                name: k8s.pod.uid
           - sources:
-              - from: connection
+              - from: resource_attribute
+                name: k8s.pod.name
+              - from: resource_attribute
+                name: k8s.namespace.name
       resourcedetection:
         detectors: [env, system]
         timeout: 5s
@@ -170,21 +222,31 @@ spec:
     service:
       pipelines:
         metrics:
-          receivers: [prometheus]
+          receivers:
+            - prometheus
+            - prometheus/cadvisor
           processors:
-            [
-              k8s_attributes,
-              resourcedetection,
-              filter/metrics,
-              transform/cluster,
-              batch,
-            ]
-          exporters: [otlp_http/grafanacloud-metrics]
+            - filter/metrics
+            - transform/cluster
+            - batch
+          exporters:
+            - otlp_http/grafanacloud-metrics
         traces:
-          receivers: [otlp]
-          processors: [k8s_attributes, resourcedetection, batch]
-          exporters: [otlp_http/grafanacloud-traces]
+          receivers:
+            - otlp
+          processors:
+            - k8s_attributes
+            - resourcedetection
+            - batch
+          exporters:
+            - otlp_http/grafanacloud-traces
         logs:
-          receivers: [filelog]
-          processors: [k8s_attributes, resource/logs, resourcedetection, batch]
-          exporters: [otlp_http/grafanacloud-logs]
+          receivers:
+            - filelog
+          processors:
+            - k8s_attributes
+            - transform/logs
+            - resource/logs
+            - batch
+          exporters:
+            - otlp_http/grafanacloud-logs
