@@ -29,11 +29,15 @@ spec:
             - --collector.meminfo
             - --collector.filesystem
             - --collector.netdev
-            - --collector.diskstats
             - --collector.uname
+            - --collector.filesystem.mount-points-exclude=^/(dev|proc|sys|run|var/lib/containerd|var/lib/kubelet)($|/)
           prometheus:
             monitor:
               enabled: true
+              metricRelabelings:
+                - sourceLabels: [__name__]
+                  regex: 'node_(cpu_seconds_total|load1|load5|load15|memory_MemTotal_bytes|memory_MemAvailable_bytes|memory_Buffers_bytes|memory_Cached_bytes|filesystem_size_bytes|filesystem_avail_bytes|network_receive_bytes_total|network_transmit_bytes_total|uname_info)'
+                  action: keep
           resources:
             requests:
               cpu: 5m
