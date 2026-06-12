@@ -82,7 +82,7 @@ spec:
                   regex: 'POD'
                   action: drop
                 - source_labels: [__name__]
-                  regex: 'container_(cpu_usage_seconds_total|cpu_cfs_throttled_seconds_total|memory_working_set_bytes|network_receive_bytes_total|network_transmit_bytes_total|network_receive_packets_total|network_transmit_packets_total|network_receive_packets_dropped_total|network_transmit_packets_dropped_total|network_receive_errors_total|network_transmit_errors_total|oom_events_total)|machine_memory_bytes'
+                  regex: 'container_(cpu_usage_seconds_total|cpu_cfs_throttled_seconds_total|memory_working_set_bytes|network_receive_bytes_total|network_transmit_bytes_total|oom_events_total)|machine_memory_bytes'
                   action: keep
                 - regex: 'id|image|name'
                   action: labeldrop
