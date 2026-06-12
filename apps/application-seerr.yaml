@@ -18,7 +18,7 @@ spec:
   sources:
     - repoURL: ghcr.io/seerr-team/seerr
       chart: seerr-chart
-      targetRevision: 3.6.0
+      targetRevision: 3.7.0
       helm:
         releaseName: seerr
         valuesObject:
