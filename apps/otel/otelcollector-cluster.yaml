@@ -36,7 +36,6 @@ spec:
         allocatable_types_to_report:
           - cpu
           - memory
-          - storage
     processors:
       transform/cluster:
         metric_statements:

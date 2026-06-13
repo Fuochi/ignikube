@@ -28,7 +28,6 @@ spec:
             - namespaces
             - nodes
             - pods
-            - replicasets
             - statefulsets
           metricAllowlist:
             - kube_daemonset_status_(desired|ready)_number_scheduled
@@ -36,10 +35,8 @@ spec:
             - kube_namespace_status_phase
             - kube_node_info
             - kube_pod_info
-            - kube_pod_status_phase
             - kube_pod_container_status_restarts_total
             - kube_pod_container_resource_(requests|limits)
-            - kube_replicaset_owner
             - kube_statefulset_(status_replicas|replicas)
           prometheus:
             monitor:

@@ -32,6 +32,11 @@ spec:
             monitor:
               enabled: true
               metricRelabelings:
+                # Drop unwanted CPU modes first (nice, irq, softirq, steal)
+                - sourceLabels: [__name__, mode]
+                  regex: 'node_cpu_seconds_total;(nice|irq|softirq|steal)'
+                  action: drop
+                # Then keep only our desired metrics
                 - sourceLabels: [__name__]
                   regex: 'node_(cpu_seconds_total|load1|load5|load15|memory_MemTotal_bytes|memory_MemAvailable_bytes|memory_Buffers_bytes|memory_Cached_bytes|uname_info)'
                   action: keep
