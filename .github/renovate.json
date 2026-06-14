@@ -4,6 +4,15 @@
     "config:recommended",
     ":semanticPrefixFix"
   ],
+  "packageRules": [
+    {
+      "description": "Group Cilium Helm chart with custom envoy image",
+      "groupName": "cilium",
+      "matchPackageNames": [
+        "cilium"
+      ]
+    }
+  ],
   "argocd": {
     "fileMatch": [
       "application-.*\\.ya?ml$",
@@ -12,6 +21,22 @@
     ]
   },
   "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Update cilium-envoy image tag based on cilium helm chart version.",
+      "fileMatch": [
+        "application-cilium\\.ya?ml$"
+      ],
+      "matchStrings": [
+        "repository: ghcr\\.io/fuochi/cilium-envoy\\s+# renovate: cilium-envoy\\s+tag: (?<currentValue>cilium-v[\\d.]+-arm64-rpi)"
+      ],
+      "depNameTemplate": "cilium",
+      "packageNameTemplate": "cilium",
+      "datasourceTemplate": "helm",
+      "registryUrlTemplate": "https://helm.cilium.io",
+      "extractVersionTemplate": "^cilium-v(?<version>.+)-arm64-rpi$",
+      "autoReplaceStringTemplate": "cilium-v{{{newValue}}}-arm64-rpi"
+    },
     {
       "customType": "regex",
       "description": "Update k3s version in update plans.",

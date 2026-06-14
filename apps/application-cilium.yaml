@@ -35,8 +35,9 @@ spec:
           envoy:
             # Use custom envoy image for raspberry pi support
             image:
-              repository: docker.io/apetutschnig/rpi-cilium-envoy
-              tag: 1.35.3
+              repository: ghcr.io/fuochi/cilium-envoy
+              # renovate: cilium-envoy
+              tag: cilium-v1.18.7-arm64-rpi
               useDigest: false
             resources:
               requests:
