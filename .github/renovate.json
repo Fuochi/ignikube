@@ -25,17 +25,16 @@
       "customType": "regex",
       "description": "Update cilium-envoy image tag based on cilium helm chart version.",
       "fileMatch": [
-        "application-cilium\\.ya?ml$"
+        "apps/application-cilium\\.ya?ml$"
       ],
       "matchStrings": [
-        "repository: ghcr\\.io/fuochi/cilium-envoy\\s+# renovate: cilium-envoy\\s+tag: (?<currentValue>cilium-v[\\d.]+-arm64-rpi)"
+        "# renovate: cilium-envoy\\n\\s+tag: cilium-v(?<currentValue>[\\d.]+)-arm64-rpi"
       ],
       "depNameTemplate": "cilium",
       "packageNameTemplate": "cilium",
       "datasourceTemplate": "helm",
       "registryUrlTemplate": "https://helm.cilium.io",
-      "extractVersionTemplate": "^cilium-v(?<version>.+)-arm64-rpi$",
-      "autoReplaceStringTemplate": "cilium-v{{{newValue}}}-arm64-rpi"
+      "autoReplaceStringTemplate": "# renovate: cilium-envoy\n              tag: cilium-v{{{newValue}}}-arm64-rpi"
     },
     {
       "customType": "regex",
