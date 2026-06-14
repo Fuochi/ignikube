@@ -55,6 +55,9 @@ spec:
                     action: replace
                   - regex: exported_(namespace|pod)
                     action: labeldrop
+                  # Drop high-churn labels that change on pod restarts/rollouts
+                  - regex: uid|pod_ip|host_ip|container_id|image_id
+                    action: labeldrop
               metrics:
                 honorLabels: true
           resources:
