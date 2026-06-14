@@ -36,6 +36,48 @@ spec:
         allocatable_types_to_report:
           - cpu
           - memory
+        metrics:
+          # Disable metrics that duplicate kube-state-metrics
+          k8s.container.cpu_limit:
+            enabled: false
+          k8s.container.cpu_request:
+            enabled: false
+          k8s.container.memory_limit:
+            enabled: false
+          k8s.container.memory_request:
+            enabled: false
+          k8s.container.ready:
+            enabled: false
+          k8s.container.restarts:
+            enabled: false
+          k8s.daemonset.current_scheduled_nodes:
+            enabled: false
+          k8s.daemonset.desired_scheduled_nodes:
+            enabled: false
+          k8s.daemonset.misscheduled_nodes:
+            enabled: false
+          k8s.daemonset.ready_nodes:
+            enabled: false
+          k8s.deployment.available:
+            enabled: false
+          k8s.deployment.desired:
+            enabled: false
+          k8s.namespace.phase:
+            enabled: false
+          k8s.pod.phase:
+            enabled: false
+          k8s.replicaset.available:
+            enabled: false
+          k8s.replicaset.desired:
+            enabled: false
+          k8s.statefulset.current_pods:
+            enabled: false
+          k8s.statefulset.desired_pods:
+            enabled: false
+          k8s.statefulset.ready_pods:
+            enabled: false
+          k8s.statefulset.updated_pods:
+            enabled: false
     processors:
       transform/cluster:
         metric_statements:
