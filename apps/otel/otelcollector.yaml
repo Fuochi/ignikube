@@ -82,9 +82,10 @@ spec:
                   regex: 'POD'
                   action: drop
                 - source_labels: [__name__]
-                  regex: 'container_(cpu_usage_seconds_total|cpu_cfs_throttled_seconds_total|memory_working_set_bytes|network_receive_bytes_total|network_transmit_bytes_total|oom_events_total)|machine_memory_bytes'
+                  regex: 'container_(cpu_usage_seconds_total|cpu_cfs_throttled_seconds_total|memory_working_set_bytes|network_receive_bytes_total|network_transmit_bytes_total|oom_events_total)|machine_(memory_bytes|cpu_cores)'
                   action: keep
-                - regex: 'id|image|name'
+                # Keep 'image' label - used in dashboard queries (image!="")
+                - regex: 'id|name'
                   action: labeldrop
       otlp:
         protocols:
