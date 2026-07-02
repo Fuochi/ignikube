@@ -34,7 +34,7 @@ spec:
               limits:
                 memory: 32Mi
           # renovate: datasource=docker packageName=netbirdio/netbird
-          routingClientImage: netbirdio/netbird:v0.73.0-rootless
+          routingClientImage: netbirdio/netbird:v0.74.1-rootless
 
     - repoURL: https://github.com/Fuochi/ignikube.git
       targetRevision: main
