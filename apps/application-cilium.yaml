@@ -19,7 +19,7 @@ spec:
   sources:
     - repoURL: https://helm.cilium.io
       chart: cilium
-      targetRevision: 1.19.5
+      targetRevision: 1.19.6
       helm:
         releaseName: cilium
         valuesObject:
@@ -37,7 +37,7 @@ spec:
             image:
               repository: ghcr.io/fuochi/cilium-envoy
               # renovate: cilium-envoy
-              tag: cilium-v1.19.5-arm64-rpi
+              tag: cilium-v1.19.6-arm64-rpi
               useDigest: false
             resources:
               requests:
