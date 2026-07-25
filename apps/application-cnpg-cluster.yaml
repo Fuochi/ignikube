@@ -69,24 +69,24 @@ spec:
               enabled: true
               size: 50Gi
               storageClass: nfs-csi
-            backups:
-              enabled: true
-              method: plugin
-              pluginConfiguration:
-                name: barman-cloud.cloudnative-pg.io
-              scheduledBackups:
-                - name: cnpg-weekly
-                  schedule: '0 0 3 * * 0' # Sun 03:00 UTC
-                  backupOwnerReference: self
-                  method: plugin
-                  pluginConfiguration:
-                    name: barman-cloud.cloudnative-pg.io
             postgresql:
               parameters:
                 shared_buffers: 128MB
               shared_preload_libraries:
                 # needed by immich
                 - 'vchord.so'
+          backups:
+            enabled: true
+            method: plugin
+            pluginConfiguration:
+              name: barman-cloud.cloudnative-pg.io
+            scheduledBackups:
+              - name: cnpg-weekly
+                schedule: '0 0 3 * * 0' # Sun 03:00 UTC
+                backupOwnerReference: self
+                method: plugin
+                pluginConfiguration:
+                  name: barman-cloud.cloudnative-pg.io
     - repoURL: https://github.com/Fuochi/ignikube.git
       targetRevision: main
       path: apps/cnpg-databases
