@@ -69,6 +69,15 @@ spec:
               enabled: true
               size: 50Gi
               storageClass: nfs-csi
+            backups:
+              enabled: true
+              method: plugin
+              scheduledBackups:
+                - name: cnpg-weekly
+                  schedule: '0 0 3 * * 0' # Sun 03:00 UTC
+                  backupOwnerReference: self
+              pluginConfiguration:
+                name: barman-cloud.cloudnative-pg.io
             postgresql:
               parameters:
                 shared_buffers: 128MB
