@@ -41,6 +41,9 @@ spec:
             create: true
             # TLS termination on gateway
             server.insecure: true
+
+            controller.repo.server.timeout.seconds: '300'
+            server.repo.server.timeout.seconds: '300'
           rbac:
             create: true
             policy.csv: |
@@ -100,7 +103,7 @@ spec:
             limits:
               memory: 320Mi
             requests:
-              cpu: 10m
+              cpu: 50m
               memory: 320Mi
 
           serviceAccount:
