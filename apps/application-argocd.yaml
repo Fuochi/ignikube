@@ -105,6 +105,19 @@ spec:
             requests:
               cpu: 50m
               memory: 320Mi
+          # on raspberry pi the default execution timeout might be too short, so we set it to 300s
+          env:
+            - name: ARGOCD_EXEC_TIMEOUT
+              value: '300s'
+
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8084
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 6
 
           serviceAccount:
             create: true
