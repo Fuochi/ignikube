@@ -110,5 +110,5 @@ spec:
       path: apps/cilium
 
     - repoURL: https://github.com/kubernetes-sigs/gateway-api
-      targetRevision: v1.4.1
+      targetRevision: v1.6.3
       path: config/crd/standard
