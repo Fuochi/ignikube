@@ -101,6 +101,9 @@ spec:
           routingMode: native
           autoDirectNodeRoutes: true
           directRoutingSkipUnreachable: true
+          endpointRoutes:
+            enabled: true
+          policyCIDRMatchMode: nodes
 
     - repoURL: https://github.com/Fuochi/ignikube.git
       targetRevision: main
