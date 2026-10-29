@@ -1,0 +1,46 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: pihole
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: pihole
+    server: https://kubernetes.default.svc
+  project: default
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+      - ApplyOutOfSyncOnly=true
+      - FailOnSharedResource=true
+  sources:
+    - repoURL: https://mojo2600.github.io/pihole-kubernetes/
+      chart: pihole
+      targetRevision: 2.38.0
+      helm:
+        releaseName: pihole
+        valuesObject:
+          strategyType: Recreate
+          admin:
+            existingSecret: pihole-admin
+            passwordKey: password
+          persistentVolumeClaim:
+            enabled: true
+            storageClass: nfs-csi
+            size: 1Gi
+          serviceDns:
+            type: LoadBalancer
+            mixedService: true
+            externalTrafficPolicy: Cluster
+            annotations:
+              lbipam.cilium.io/ips: '192.168.1.19'
+          serviceDhcp:
+            enabled: false
+          serviceWeb:
+            type: ClusterIP
+          virtualHost: pihole.fuochi.top
+    - repoURL: https://github.com/Fuochi/ignikube.git
+      targetRevision: main
+      path: apps/pihole
